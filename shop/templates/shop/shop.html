@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ seller.username }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0a0a0a;
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            padding-top: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+        .phone-frame {
+            width: 400px;
+            max-height: 95vh;
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Top Nav - ACCOUNT NAME + THREE DOTS */
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #2a2a2a;
+            flex-shrink: 0;
+        }
+        .top-nav .account-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .top-nav .account-name .chevron {
+            color: #8e8e8e;
+            font-size: 14px;
+        }
+        .top-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .top-nav-actions a {
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .top-nav-actions .logout-link {
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .three-dots-btn {
+            background: none;
+            border: none;
+            color: #f5f5f5;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .three-dots-btn:hover {
+            background: #2a2a2a;
+        }
+
+        /* Three Dots Dropdown Menu */
+        .dropdown-menu {
+            position: absolute;
+            top: 55px;
+            right: 16px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            min-width: 260px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+            z-index: 9999;
+            display: none;
+            overflow: hidden;
+            padding: 6px 0;
+        }
+        .dropdown-menu.show {
+            display: block;
+        }
+        .dropdown-menu .menu-item {
+            padding: 10px 16px;
+            color: #e0e0e0;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+        .dropdown-menu .menu-item:hover {
+            background: #2a2a2a;
+        }
+        .dropdown-menu .menu-item.danger {
+            color: #ed4956;
+        }
+        .dropdown-menu .menu-item .icon {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        .dropdown-menu .divider {
+            height: 1px;
+            background: #2a2a2a;
+            margin: 4px 0;
+        }
+
+        /* Profile Picture Lightbox */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .lightbox-overlay.show {
+            display: flex;
+        }
+        .lightbox-overlay img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            object-fit: contain;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+        }
+        .lightbox-overlay .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #f5f5f5;
+            font-size: 36px;
+            cursor: pointer;
+            font-weight: 300;
+            transition: 0.2s;
+        }
+        .lightbox-overlay .close-lightbox:hover {
+            transform: scale(1.2);
+        }
+
+        /* Scrollable Content Area */
+        .scroll-content {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .scroll-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scroll-content::-webkit-scrollbar-track {
+            background: #121212;
+        }
+        .scroll-content::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 2px;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            padding: 20px 16px 10px 16px;
+            background: #121212;
+        }
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .profile-pic-wrapper {
+            cursor: pointer;
+            position: relative;
+        }
+        .profile-pic-wrapper:hover .profile-pic {
+            opacity: 0.85;
+        }
+        .profile-pic-wrapper:hover .profile-pic-hint {
+            display: flex;
+        }
+        .profile-pic-hint {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f5f5f5;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 12px;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2a2a2a;
+            flex-shrink: 0;
+            background: #2a2a2a;
+            transition: 0.2s;
+        }
+        .profile-pic-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: #666;
+            flex-shrink: 0;
+            border: 2px solid #2a2a2a;
+            cursor: pointer;
+        }
+        .profile-stats {
+            display: flex;
+            flex: 1;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .profile-stats .stat {
+            color: #f5f5f5;
+        }
+        .profile-stats .stat strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .profile-stats .stat span {
+            font-size: 13px;
+            color: #a8a8a8;
+        }
+
+        .profile-info {
+            margin-top: 12px;
+        }
+        .profile-info .display-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f5f5f5;
+        }
+        .profile-info .category {
+            color: #0095f6;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 4px 0;
+        }
+        .profile-info .bio {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 4px 0;
+        }
+        .profile-info .address {
+            color: #a8a8a8;
+            font-size: 13px;
+            margin: 2px 0;
+        }
+        .profile-info .phone {
+            color: #a8a8a8;
+            font-size: 13px;
+            margin: 2px 0;
+        }
+        .profile-info .website {
+            color: #0095f6;
+            font-size: 13px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 2px 0;
+        }
+        .profile-info .website:hover { text-decoration: underline; }
+        .profile-info .email {
+            color: #a8a8a8;
+            font-size: 13px;
+            margin: 2px 0;
+        }
+
+        .followed-by {
+            color: #a8a8a8;
+            font-size: 13px;
+            margin: 8px 0;
+        }
+        .followed-by strong {
+            color: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin: 8px 0 12px 0;
+        }
+        .btn-follow {
+            background: #0095f6;
+            color: white;
+            border: none;
+            padding: 6px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+            transition: 0.2s;
+        }
+        .btn-follow:hover { background: #0077c2; }
+        .btn-follow.following {
+            background: #2a2a2a;
+            color: #f5f5f5;
+            border: 1px solid #2a2a2a;
+        }
+        .btn-message {
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            color: #f5f5f5;
+            padding: 6px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+            transition: 0.2s;
+        }
+        .btn-message:hover { background: #1a1a1a; }
+
+        .suggestions {
+            padding: 12px 16px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .suggestions .suggest-title {
+            color: #a8a8a8;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+        }
+        .suggest-title a {
+            color: #0095f6;
+            text-decoration: none;
+            font-weight: 400;
+        }
+
+        /* Profile Tabs */
+        .profile-tabs {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 16px;
+            border-top: 1px solid #2a2a2a;
+            background: #121212;
+            flex-shrink: 0;
+        }
+        .profile-tabs .tab {
+            padding: 12px 0 10px 0;
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: 0.2s;
+        }
+        .profile-tabs .tab svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: #8e8e8e;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .profile-tabs .tab.active {
+            border-bottom-color: #f5f5f5;
+        }
+        .profile-tabs .tab.active svg {
+            stroke: #f5f5f5;
+        }
+        .profile-tabs .tab:hover svg {
+            stroke: #f5f5f5;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #0a0a0a;
+            min-height: 200px;
+        }
+        .tab-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .tab-content::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+        .tab-content::-webkit-scrollbar-thumb {
+            background: #2a2a2a;
+            border-radius: 2px;
+        }
+        .tab-panel {
+            display: none;
+            min-height: 200px;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            padding: 2px;
+            background: #0a0a0a;
+        }
+        .product-card {
+            background: #1a1a1a;
+            text-align: center;
+            padding: 8px 4px;
+            border: 1px solid #2a2a2a;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .product-card:hover { opacity: 0.7; background: #252525; }
+        .product-card img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 2px;
+            background: #2a2a2a;
+        }
+        .product-card .no-img {
+            height: 130px;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+            border-radius: 2px;
+        }
+        .product-card h3 {
+            font-size: 11px;
+            margin: 6px 0 3px 0;
+            color: #e0e0e0;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .product-card .price {
+            font-weight: 700;
+            color: #f5f5f5;
+            font-size: 12px;
+        }
+        .product-card .original-price {
+            text-decoration: line-through;
+            color: #777;
+            font-size: 10px;
+            margin-left: 4px;
+        }
+        .product-card .discount {
+            color: #ed4956;
+            font-size: 10px;
+            margin-left: 4px;
+            font-weight: 600;
+        }
+
+        /* Empty States - No Icons */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+            text-align: center;
+            padding: 40px 20px;
+            background: #0a0a0a;
+        }
+        .empty-state .empty-title {
+            color: #f5f5f5;
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+        .empty-state .empty-subtitle {
+            color: #8e8e8e;
+            font-size: 14px;
+            max-width: 280px;
+            line-height: 1.6;
+        }
+        .empty-state .empty-subtitle a {
+            color: #0095f6;
+            text-decoration: none;
+        }
+        .empty-state .empty-subtitle a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 420px) {
+            .phone-frame {
+                width: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+            body { padding-top: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        
+        <!-- Top Nav - ACCOUNT NAME + THREE DOTS -->
+        <div class="top-nav">
+            <div class="account-name">
+                {{ seller.username }}
+                <!-- <span class="chevron">▼</span> -->
+            </div>
+            <div class="top-nav-actions">
+                <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+                <button class="three-dots-btn" id="threeDotsBtn">⋮</button>
+            </div>
+        </div>
+
+        <!-- Three Dots Dropdown Menu -->
+        <div class="dropdown-menu" id="dropdownMenu">
+            <button class="menu-item" data-action="restrict">
+                Restrict
+            </button>
+            <button class="menu-item" data-action="block">
+                Block
+            </button>
+            <button class="menu-item danger" data-action="report">
+                Report
+            </button>
+            <div class="divider"></div>
+            <button class="menu-item" data-action="about">
+                About this account
+            </button>
+            <button class="menu-item" data-action="hide-story">
+                Hide your story
+            </button>
+            <div class="divider"></div>
+            <button class="menu-item" data-action="copy-url">
+                Copy profile URL
+            </button>
+            <button class="menu-item" data-action="share">
+                Share this profile
+            </button>
+            <button class="menu-item" data-action="qr">
+                QR code
+            </button>
+        </div>
+
+        <!-- Profile Picture Lightbox -->
+        <div class="lightbox-overlay" id="lightboxOverlay">
+            <span class="close-lightbox" id="closeLightbox">✕</span>
+            {% if seller.profile_picture %}
+                <img src="{{ seller.profile_picture.url }}" alt="{{ seller.username }}" id="lightboxImage">
+            {% else %}
+                <div style="color:#f5f5f5; font-size:64px;">📸</div>
+            {% endif %}
+        </div>
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-row">
+                <div class="profile-pic-wrapper" id="profilePicWrapper">
+                    {% if seller.profile_picture %}
+                        <img src="{{ seller.profile_picture.url }}" alt="{{ seller.username }}" class="profile-pic" id="profilePic">
+                    {% else %}
+                        <div class="profile-pic-placeholder">📸</div>
+                    {% endif %}
+                    <div class="profile-pic-hint">View</div>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat">
+                        <strong id="post-count">{{ products|length }}</strong>
+                        <span>posts</span>
+                    </div>
+                    <div class="stat">
+                        <strong>30.7K</strong>
+                        <span>followers</span>
+                    </div>
+                    <div class="stat">
+                        <strong>46</strong>
+                        <span>following</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <div class="display-name">{{ seller.username|capfirst }}</div>
+                {% if seller.business_category %}
+                    <div class="category">{{ seller.business_category }}</div>
+                {% endif %}
+                {% if seller.bio %}
+                    <div class="bio">{{ seller.bio|linebreaks }}</div>
+                {% endif %}
+                {% if seller.location %}
+                    <div class="address">📍 {{ seller.location }}</div>
+                {% endif %}
+                {% if seller.phone %}
+                    <div class="phone">📞 {{ seller.phone }}</div>
+                {% endif %}
+                {% if seller.website %}
+                    <a href="{{ seller.website }}" target="_blank" class="website">{{ seller.website }}</a>
+                {% endif %}
+                {% if seller.email %}
+                    <div class="email">✉️ {{ seller.email }}</div>
+                {% endif %}
+            </div>
+
+            <div class="followed-by">
+                Followed by <strong>_rmajfr</strong>, <strong>sara.fathimahh</strong> and <strong>4 others</strong>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-follow" id="followBtn">Follow</button>
+                <button class="btn-message" id="messageBtn">Message</button>
+            </div>
+        </div>
+
+        <!-- Suggestions Row -->
+        <div class="suggestions">
+            <div class="suggest-title">
+                Suggested for you
+                <a href="#">See all</a>
+            </div>
+        </div>
+
+        <!-- Profile Tabs -->
+        <div class="profile-tabs" id="profileTabs">
+            <div class="tab active" data-tab="posts">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+            </div>
+            <div class="tab" data-tab="reposts">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="17,4 20,7 17,10" />
+                    <path d="M20 7 L4 7 C4 4 5 3 8 3" />
+                    <polyline points="7,20 4,17 7,14" />
+                    <path d="M4 17 L20 17 C20 20 19 21 16 21" />
+                </svg>
+            </div>
+            <div class="tab" data-tab="tagged">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="12" cy="10" r="4"/>
+                    <path d="M6 20 L6 17 C6 14.5 8.5 13 12 13 C15.5 13 18 14.5 18 17 L18 20"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="tabContent">
+            
+            <!-- POSTS PANEL -->
+            <div class="tab-panel active" id="panel-posts">
+                {% if products %}
+                <div class="product-grid" id="productGrid">
+                    {% for product in products %}
+                    <a href="{% url 'product_detail' product.id %}" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="product-card">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="no-img">📷 No Image</div>
+                            {% endif %}
+                            <h3>{{ product.name }}</h3>
+                            <div>
+                                <span class="price">₹{{ product.price }}</span>
+                                {% if product.original_price %}
+                                    <span class="original-price">₹{{ product.original_price }}</span>
+                                    <span class="discount">{{ product.discount_percent }}% off</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state no-posts">
+                    <div class="empty-title">No Posts Yet</div>
+                    <div class="empty-subtitle">When you share photos, they will appear here.</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- REPOSTS PANEL -->
+            <div class="tab-panel" id="panel-reposts">
+                <div class="empty-state no-reposts">
+                    <div class="empty-title">No reposts</div>
+                    <div class="empty-subtitle">There are no reposts to show.</div>
+                </div>
+            </div>
+
+            <!-- TAGGED PANEL -->
+            <div class="tab-panel" id="panel-tagged">
+                <div class="empty-state no-posts">
+                    <div class="empty-title">No Posts Yet</div>
+                    <div class="empty-subtitle">When you are tagged in photos, they will appear here.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // ==================== THREE DOTS DROPDOWN ====================
+            const threeDotsBtn = document.getElementById('threeDotsBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            let dropdownOpen = false;
+
+            threeDotsBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dropdownOpen = !dropdownOpen;
+                dropdownMenu.classList.toggle('show', dropdownOpen);
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!dropdownMenu.contains(e.target) && e.target !== threeDotsBtn) {
+                    dropdownMenu.classList.remove('show');
+                    dropdownOpen = false;
+                }
+            });
+
+            // Menu item actions
+            document.querySelectorAll('.dropdown-menu .menu-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    const action = this.dataset.action;
+                    const label = this.textContent.trim();
+                    dropdownMenu.classList.remove('show');
+                    dropdownOpen = false;
+                    
+                    // Different actions
+                    switch(action) {
+                        case 'restrict':
+                            showToast('🔒 Account restricted');
+                            break;
+                        case 'block':
+                            if (confirm('Are you sure you want to block luxe.boutique?')) {
+                                showToast('⛔ Account blocked');
+                            }
+                            break;
+                        case 'report':
+                            showToast('⚠️ Report submitted');
+                            break;
+                        case 'about':
+                            showToast('ℹ️ About this account');
+                            break;
+                        case 'hide-story':
+                            showToast('👻 Story hidden');
+                            break;
+                        case 'copy-url':
+                            navigator.clipboard.writeText(window.location.href).then(() => {
+                                showToast('📋 Profile URL copied!');
+                            });
+                            break;
+                        case 'share':
+                            if (navigator.share) {
+                                navigator.share({
+                                    title: '{{ seller.username }} on Instagram',
+                                    url: window.location.href
+                                });
+                            } else {
+                                showToast('📤 Share this profile');
+                            }
+                            break;
+                        case 'qr':
+                            showToast('📱 QR Code coming soon!');
+                            break;
+                        default:
+                            showToast(label);
+                    }
+                });
+            });
+
+            // ==================== PROFILE PICTURE LIGHTBOX ====================
+            const profilePicWrapper = document.getElementById('profilePicWrapper');
+            const lightboxOverlay = document.getElementById('lightboxOverlay');
+            const closeLightbox = document.getElementById('closeLightbox');
+
+            if (profilePicWrapper) {
+                profilePicWrapper.addEventListener('click', function() {
+                    lightboxOverlay.classList.add('show');
+                });
+            }
+
+            // Close lightbox
+            function closeLightboxFunc() {
+                lightboxOverlay.classList.remove('show');
+            }
+
+            closeLightbox.addEventListener('click', closeLightboxFunc);
+            lightboxOverlay.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeLightboxFunc();
+                }
+            });
+
+            // Close with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeLightboxFunc();
+                }
+            });
+
+            // ==================== TAB SWITCHING ====================
+            const tabs = document.querySelectorAll('.tab');
+            const panels = {
+                'posts': document.getElementById('panel-posts'),
+                'reposts': document.getElementById('panel-reposts'),
+                'tagged': document.getElementById('panel-tagged')
+            };
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    Object.values(panels).forEach(p => p.classList.remove('active'));
+                    
+                    const tabName = this.dataset.tab;
+                    if (panels[tabName]) {
+                        panels[tabName].classList.add('active');
+                    }
+                });
+            });
+
+            // ==================== FOLLOW BUTTON TOGGLE ====================
+            const followBtn = document.getElementById('followBtn');
+            if (followBtn) {
+                followBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (this.textContent === 'Follow') {
+                        this.textContent = 'Following';
+                        this.classList.add('following');
+                        showToast('You are now following luxe.boutique!');
+                    } else {
+                        this.textContent = 'Follow';
+                        this.classList.remove('following');
+                        showToast('Unfollowed luxe.boutique');
+                    }
+                });
+            }
+
+            // ==================== MESSAGE BUTTON ====================
+            const messageBtn = document.getElementById('messageBtn');
+            if (messageBtn) {
+                messageBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    showChatPopup();
+                });
+            }
+
+            // ==================== TOAST NOTIFICATION ====================
+            function showToast(message) {
+                const existingToast = document.getElementById('toast');
+                if (existingToast) existingToast.remove();
+                
+                const toast = document.createElement('div');
+                toast.id = 'toast';
+                toast.innerHTML = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    bottom: 30px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: #1a1a1a;
+                    color: #f5f5f5;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    border: 1px solid #2a2a2a;
+                    font-size: 14px;
+                    z-index: 99999;
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+                    animation: fadeInUp 0.3s ease;
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.opacity = '0';
+                    toast.style.transition = 'opacity 0.3s';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+
+            // ==================== CHAT POPUP ====================
+            function showChatPopup() {
+                const existingChat = document.getElementById('chat-popup');
+                if (existingChat) {
+                    existingChat.style.display = existingChat.style.display === 'none' ? 'block' : 'none';
+                    return;
+                }
+                
+                const chat = document.createElement('div');
+                chat.id = 'chat-popup';
+                chat.innerHTML = `
+                    <div style="
+                        position: fixed;
+                        bottom: 100px;
+                        right: 20px;
+                        width: 320px;
+                        max-width: 90%;
+                        background: #1a1a1a;
+                        border: 1px solid #2a2a2a;
+                        border-radius: 12px;
+                        box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                        z-index: 99998;
+                        overflow: hidden;
+                    ">
+                        <div style="
+                            background: #121212;
+                            padding: 12px 16px;
+                            border-bottom: 1px solid #2a2a2a;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
+                        ">
+                            <span style="color: #f5f5f5; font-weight: 600; font-size: 16px;">💬 luxe.boutique</span>
+                            <span id="close-chat" style="color: #8e8e8e; cursor: pointer; font-size: 20px;">✕</span>
+                        </div>
+                        <div style="
+                            padding: 16px;
+                            height: 250px;
+                            overflow-y: auto;
+                            background: #121212;
+                        ">
+                            <div style="color: #8e8e8e; text-align: center; font-size: 13px; margin-bottom: 16px;">
+                                You are now connected with luxe.boutique
+                            </div>
+                            <div style="
+                                background: #0095f6;
+                                color: white;
+                                padding: 8px 12px;
+                                border-radius: 12px 12px 12px 4px;
+                                max-width: 80%;
+                                margin-bottom: 8px;
+                                font-size: 14px;
+                            ">
+                                👋 Hi! How can I help you with our products?
+                            </div>
+                            <div style="
+                                background: #2a2a2a;
+                                color: #f5f5f5;
+                                padding: 8px 12px;
+                                border-radius: 12px 12px 4px 12px;
+                                max-width: 80%;
+                                margin-left: auto;
+                                margin-bottom: 8px;
+                                font-size: 14px;
+                            ">
+                                I'm interested in the handbag!
+                            </div>
+                        </div>
+                        <div style="
+                            padding: 12px 16px;
+                            border-top: 1px solid #2a2a2a;
+                            display: flex;
+                            gap: 8px;
+                            background: #121212;
+                        ">
+                            <input type="text" placeholder="Type a message..." style="
+                                flex: 1;
+                                padding: 8px 12px;
+                                background: #1a1a1a;
+                                border: 1px solid #2a2a2a;
+                                border-radius: 20px;
+                                color: #f5f5f5;
+                                font-size: 14px;
+                                outline: none;
+                            ">
+                            <button style="
+                                background: #0095f6;
+                                color: white;
+                                border: none;
+                                border-radius: 20px;
+                                padding: 8px 16px;
+                                font-weight: 600;
+                                cursor: pointer;
+                            ">Send</button>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(chat);
+                
+                document.getElementById('close-chat').addEventListener('click', function() {
+                    chat.style.display = 'none';
+                });
+            }
+
+            // Add CSS animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeInUp {
+                    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
+                }
+            `;
+            document.head.appendChild(style);
+
+            console.log('✅ Instagram clone loaded!');
+        });
+    </script>
+
+</body>
+</html>

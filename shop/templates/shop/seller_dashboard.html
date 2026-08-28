@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ user.username }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0a0a0a;
+            display: flex; 
+            justify-content: center; 
+            padding-top: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+        }
+        .phone-frame {
+            width: 400px;
+            max-height: 95vh;
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .phone-frame::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #2a2a2a;
+            flex-shrink: 0;
+        }
+        .top-nav .account-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f5f5f5;
+        }
+        .top-nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .top-nav-actions .add-post-link {
+            background: #0095f6;
+            color: white !important;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .top-nav-actions .add-post-link:hover {
+            background: #0077c2;
+        }
+        .top-nav-actions .logout-link {
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .top-nav-actions .logout-link:hover {
+            text-decoration: underline;
+        }
+
+        .profile-header {
+            padding: 20px 16px 10px 16px;
+        }
+        .profile-row {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2a2a2a;
+            background: #2a2a2a;
+        }
+        .profile-pic-placeholder {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            color: #666;
+        }
+        .profile-stats {
+            display: flex;
+            flex: 1;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .profile-stats .stat {
+            color: #f5f5f5;
+        }
+        .profile-stats .stat strong {
+            display: block;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .profile-stats .stat span {
+            font-size: 13px;
+            color: #a8a8a8;
+        }
+
+        .profile-info {
+            margin-top: 12px;
+        }
+        .profile-info .display-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f5f5f5;
+        }
+        .profile-info .category {
+            color: #0095f6;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 4px 0;
+        }
+        .profile-info .bio {
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 4px 0;
+        }
+        .profile-info .address {
+            color: #a8a8a8;
+            font-size: 13px;
+            margin: 2px 0;
+        }
+        .profile-info .phone {
+            color: #a8a8a8;
+            font-size: 13px;
+            margin: 2px 0;
+        }
+        .profile-info .email {
+            color: #a8a8a8;
+            font-size: 13px;
+            margin: 2px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin: 8px 0 12px 0;
+        }
+        .btn-edit-profile {
+            background: #2a2a2a;
+            color: #f5f5f5;
+            border: none;
+            padding: 6px 25px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            flex: 1;
+            text-align: center;
+        }
+        .btn-share-profile {
+            background: transparent;
+            border: 1px solid #2a2a2a;
+            color: #f5f5f5;
+            padding: 6px 20px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .btn-share-profile:hover { background: #1a1a1a; }
+
+        .divider {
+            height: 1px;
+            background: #2a2a2a;
+            margin: 8px 0;
+        }
+
+        .profile-tabs {
+            display: flex;
+            justify-content: space-around;
+            padding: 0 16px;
+            border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
+            background: #121212;
+            flex-shrink: 0;
+        }
+        .profile-tabs .tab {
+            padding: 12px 0 10px 0;
+            flex: 1;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        .profile-tabs .tab svg {
+            width: 22px;
+            height: 22px;
+            fill: none;
+            stroke: #8e8e8e;
+            stroke-width: 1.8;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .profile-tabs .tab.active {
+            border-bottom-color: #f5f5f5;
+        }
+        .profile-tabs .tab.active svg {
+            stroke: #f5f5f5;
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            background: #0a0a0a;
+            min-height: 200px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+        .tab-content::-webkit-scrollbar {
+            width: 0px;
+            background: transparent;
+        }
+        .tab-panel {
+            display: none;
+            min-height: 200px;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            padding: 2px;
+        }
+        .product-card {
+            background: #1a1a1a;
+            text-align: center;
+            padding: 8px 4px;
+            border: 1px solid #2a2a2a;
+            border-radius: 2px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .product-card:hover { opacity: 0.7; }
+        .product-card img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 2px;
+            background: #2a2a2a;
+        }
+        .product-card .no-img {
+            height: 130px;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+        .product-card h3 {
+            font-size: 11px;
+            margin: 6px 0 3px 0;
+            color: #e0e0e0;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .product-card .price {
+            font-weight: 700;
+            color: #f5f5f5;
+            font-size: 12px;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+            text-align: center;
+            padding: 40px 20px;
+        }
+        .empty-state .empty-title {
+            color: #f5f5f5;
+            font-size: 28px;
+            font-weight: 300;
+            margin-bottom: 8px;
+        }
+        .empty-state .empty-subtitle {
+            color: #8e8e8e;
+            font-size: 14px;
+            max-width: 280px;
+            line-height: 1.6;
+        }
+
+        .customers-section {
+            padding: 12px 16px;
+            background: #121212;
+            border-top: 1px solid #2a2a2a;
+        }
+        .customers-section .section-title {
+            color: #8e8e8e;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .customers-section .section-title .count {
+            font-size: 12px;
+            color: #555;
+            font-weight: 400;
+            text-transform: none;
+        }
+        .customer-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-bottom: 6px;
+        }
+        .customer-card:hover {
+            background: #252525;
+            border-color: #3a3a3a;
+        }
+        .customer-card .customer-pic {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #2a2a2a;
+        }
+        .customer-card .customer-pic-placeholder {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: #666;
+        }
+        .customer-card .customer-info {
+            flex: 1;
+        }
+        .customer-card .customer-info .customer-name {
+            color: #f5f5f5;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .customer-card .customer-info .customer-desc {
+            color: #8e8e8e;
+            font-size: 12px;
+        }
+        .customer-card .customer-badge {
+            background: #2a2a2a;
+            color: #8e8e8e;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+        .customer-card .customer-arrow {
+            color: #8e8e8e;
+            font-size: 16px;
+        }
+        .no-customers {
+            color: #8e8e8e;
+            font-size: 14px;
+            text-align: center;
+            padding: 16px;
+        }
+
+        /* BOTTOM NAVIGATION - SVG ICONS */
+        .bottom-nav {
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            padding: 10px 16px 14px !important;
+            border-top: 1px solid #2a2a2a !important;
+            background: #121212 !important;
+            flex-shrink: 0 !important;
+            width: 100% !important;
+            min-height: 60px !important;
+        }
+        .bottom-nav .nav-item {
+            color: #8e8e8e;
+            text-decoration: none;
+            font-size: 10px;
+            text-align: center;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 2px !important;
+            background: none !important;
+            border: none !important;
+            cursor: pointer !important;
+            font-family: inherit !important;
+            position: relative !important;
+            padding: 4px 8px !important;
+        }
+        .bottom-nav .nav-item:hover { color: #f5f5f5 !important; }
+        .bottom-nav .nav-item.active { color: #f5f5f5 !important; }
+
+        .bottom-nav .nav-item svg {
+            width: 28px !important;
+            height: 28px !important;
+            fill: none !important;
+            stroke: currentColor !important;
+            stroke-width: 2 !important;
+            stroke-linecap: round !important;
+            stroke-linejoin: round !important;
+            display: block !important;
+        }
+        .bottom-nav .nav-item .label {
+            font-size: 10px !important;
+            color: #8e8e8e !important;
+        }
+        .bottom-nav .nav-item.active .label {
+            color: #f5f5f5 !important;
+        }
+        .nav-item .badge {
+            position: absolute !important;
+            top: 0 !important;
+            right: 2px !important;
+            width: 8px !important;
+            height: 8px !important;
+            background: #ed4956 !important;
+            border-radius: 50% !important;
+            border: 2px solid #121212 !important;
+        }
+
+        /* FLOATING ACTION BUTTON - Instagram Style */
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #0095f6, #0077c2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(0, 149, 246, 0.4);
+            color: white;
+            text-decoration: none;
+            transition: 0.3s;
+            z-index: 100;
+            border: none;
+            cursor: pointer;
+        }
+        .fab:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 24px rgba(0, 149, 246, 0.5);
+        }
+        .fab svg {
+            width: 28px;
+            height: 28px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        @media (max-width: 420px) {
+            .phone-frame {
+                width: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+            body { padding-top: 0; }
+            .fab {
+                bottom: 75px;
+                right: 16px;
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        
+        <!-- TOP NAV -->
+        <div class="top-nav">
+            <span class="account-name">{{ user.username }}</span>
+            <div class="top-nav-actions">
+                <a href="{% url 'add_product' %}" class="add-post-link">+ Add Post</a>
+                <a href="{% url 'logout' %}" class="logout-link">Logout</a>
+            </div>
+        </div>
+
+        <!-- PROFILE HEADER -->
+        <div class="profile-header">
+            <div class="profile-row">
+                {% if user.profile_picture %}
+                    <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="profile-pic">
+                {% else %}
+                    <div class="profile-pic-placeholder">📸</div>
+                {% endif %}
+                <div class="profile-stats">
+                    <div class="stat">
+                        <strong>{{ products|length }}</strong>
+                        <span>posts</span>
+                    </div>
+                    <div class="stat">
+                        <strong>30.7K</strong>
+                        <span>followers</span>
+                    </div>
+                    <div class="stat">
+                        <strong>46</strong>
+                        <span>following</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-info">
+                <div class="display-name">{{ user.username|capfirst }}</div>
+                {% if user.business_category %}
+                    <div class="category">{{ user.business_category }}</div>
+                {% endif %}
+                {% if user.bio %}
+                    <div class="bio">{{ user.bio|linebreaks }}</div>
+                {% endif %}
+                {% if user.location %}
+                    <div class="address">📍 {{ user.location }}</div>
+                {% endif %}
+                {% if user.phone %}
+                    <div class="phone">📞 {{ user.phone }}</div>
+                {% endif %}
+                {% if user.email %}
+                    <div class="email">✉️ {{ user.email }}</div>
+                {% endif %}
+            </div>
+
+            <div class="action-buttons">
+                <span class="btn-edit-profile">Edit profile</span>
+                <button class="btn-share-profile" onclick="shareProfile()">Share profile</button>
+            </div>
+        </div>
+
+        <!-- PROFILE TABS -->
+        <div class="profile-tabs">
+            <div class="tab active" onclick="switchTab('posts')">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+            </div>
+            <div class="tab" onclick="switchTab('reposts')">
+                <svg viewBox="0 0 24 24">
+                    <polyline points="17,4 20,7 17,10"/>
+                    <path d="M20 7 L4 7 C4 4 5 3 8 3"/>
+                    <polyline points="7,20 4,17 7,14"/>
+                    <path d="M4 17 L20 17 C20 20 19 21 16 21"/>
+                </svg>
+            </div>
+            <div class="tab" onclick="switchTab('tagged')">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="12" cy="10" r="4"/>
+                    <path d="M6 20 L6 17 C6 14.5 8.5 13 12 13 C15.5 13 18 14.5 18 17 L18 20"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- TAB CONTENT -->
+        <div class="tab-content" id="tabContent">
+            
+            <div class="tab-panel active" id="panel-posts">
+                {% if products %}
+                <div class="product-grid">
+                    {% for product in products %}
+                    <a href="{% url 'product_detail' product.id %}" style="text-decoration: none; color: inherit; display: block;">
+                        <div class="product-card">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <div class="no-img">📷 No Image</div>
+                            {% endif %}
+                            <h3>{{ product.name }}</h3>
+                            <div class="price">₹{{ product.price }}</div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-title">No Posts Yet</div>
+                    <div class="empty-subtitle">Tap the <strong>+ Add Post</strong> button above to upload your first product!</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="tab-panel" id="panel-reposts">
+                <div class="empty-state">
+                    <div class="empty-title">No reposts</div>
+                    <div class="empty-subtitle">There are no reposts to show.</div>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="panel-tagged">
+                <div class="empty-state">
+                    <div class="empty-title">No Posts Yet</div>
+                    <div class="empty-subtitle">When you are tagged in photos, they will appear here.</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- CUSTOMERS SECTION -->
+        <div class="customers-section">
+            <div class="section-title">
+                👥 Your Customers
+                <span class="count">{{ customers|length }} buyers</span>
+            </div>
+            
+            {% if customers %}
+                {% for customer in customers %}
+                <div class="customer-card" onclick="showCustomer('{{ customer.username|escapejs }}', '{{ customer.bio|default:"No bio yet"|escapejs }}')">
+                    {% if customer.profile_picture %}
+                        <img src="{{ customer.profile_picture.url }}" alt="{{ customer.username }}" class="customer-pic">
+                    {% else %}
+                        <div class="customer-pic-placeholder">👤</div>
+                    {% endif %}
+                    <div class="customer-info">
+                        <div class="customer-name">{{ customer.username }}</div>
+                        <div class="customer-desc">
+                            {% if customer.bio %}
+                                {{ customer.bio|truncatechars:30 }}
+                            {% else %}
+                                No bio yet
+                            {% endif %}
+                        </div>
+                    </div>
+                    <span class="customer-badge">Buyer</span>
+                    <span class="customer-arrow">›</span>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-customers">No buyers registered yet.</div>
+            {% endif %}
+        </div>
+
+        <!-- BOTTOM NAVIGATION -->
+        <div class="bottom-nav">
+            <a href="#" class="nav-item active">
+                <svg viewBox="0 0 24 24">
+                    <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/>
+                </svg>
+                <span class="label">Home</span>
+            </a>
+
+            <a href="#" class="nav-item" onclick="showToast('🔍 Search coming soon!')">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="M21 21l-4.35-4.35"/>
+                </svg>
+                <span class="label">Search</span>
+            </a>
+
+            <a href="#" class="nav-item" onclick="showToast('🎬 Reels coming soon!')">
+                <svg viewBox="0 0 24 24">
+                    <rect x="2" y="4" width="20" height="16" rx="4"/>
+                    <polygon points="10,8 16,12 10,16" fill="none" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span class="label">Reels</span>
+            </a>
+
+            <a href="#" class="nav-item" onclick="showToast('✏️ Create post coming soon!')">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 5v14M5 12h14"/>
+                    <circle cx="12" cy="12" r="10"/>
+                </svg>
+                <span class="badge"></span>
+                <span class="label">Create</span>
+            </a>
+
+            <a href="#" class="nav-item" onclick="showToast('👤 Profile')">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10"/>
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M5 20v-1a4 4 0 014-4h6a4 4 0 014 4v1"/>
+                </svg>
+                <span class="badge"></span>
+                <span class="label">Profile</span>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- FLOATING ACTION BUTTON (Instagram Style) -->
+    <a href="{% url 'add_product' %}" class="fab" title="Add Product">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 5v14M5 12h14"/>
+            <circle cx="12" cy="12" r="10"/>
+        </svg>
+    </a>
+
+    <script>
+        // ============================================ //
+        // SHARE PROFILE                               //
+        // ============================================ //
+        function shareProfile() {
+            if (navigator.share) {
+                navigator.share({
+                    title: '{{ user.username }} on Instagram Clone',
+                    url: window.location.href
+                });
+            } else {
+                navigator.clipboard.writeText(window.location.href).then(() => {
+                    showToast('📋 Profile URL copied!');
+                });
+            }
+        }
+
+        // ============================================ //
+        // SHOW CUSTOMER                               //
+        // ============================================ //
+        function showCustomer(username, bio) {
+            showToast('👤 Customer: ' + username + '\n📝 Bio: ' + bio);
+        }
+
+        // ============================================ //
+        // TOAST NOTIFICATION                          //
+        // ============================================ //
+        function showToast(message) {
+            const existing = document.getElementById('toast');
+            if (existing) existing.remove();
+            
+            const toast = document.createElement('div');
+            toast.id = 'toast';
+            toast.textContent = message;
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #1a1a1a;
+                color: #f5f5f5;
+                padding: 12px 24px;
+                border-radius: 8px;
+                border: 1px solid #2a2a2a;
+                font-size: 14px;
+                z-index: 99999;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+                animation: fadeInUp 0.3s ease;
+                max-width: 90%;
+                text-align: center;
+                white-space: pre-line;
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = 'opacity 0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ============================================ //
+        // TAB SWITCHING                                //
+        // ============================================ //
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const panels = {
+                'posts': document.getElementById('panel-posts'),
+                'reposts': document.getElementById('panel-reposts'),
+                'tagged': document.getElementById('panel-tagged')
+            };
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+            
+            Object.keys(panels).forEach(key => {
+                panels[key].classList.remove('active');
+            });
+            if (panels[tabName]) {
+                panels[tabName].classList.add('active');
+            }
+        }
+
+        // ============================================ //
+        // BOTTOM NAV HIGHLIGHTING                      //
+        // ============================================ //
+        document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (!this.getAttribute('onclick')) {
+                    e.preventDefault();
+                }
+                document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // ============================================ //
+        // CSS ANIMATIONS                              //
+        // ============================================ //
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+
+</body>
+</html>
