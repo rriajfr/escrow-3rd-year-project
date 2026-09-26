@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,7 +15,7 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         .phone-frame {
-            width: 400px;
+            width: 780px;
             max-height: 95vh;
             background: #121212;
             border: 1px solid #2a2a2a;
@@ -25,7 +26,6 @@
             flex-direction: column;
         }
         
-        /* Top Nav - ACCOUNT NAME + THREE DOTS */
         .top-nav {
             display: flex;
             justify-content: space-between;
@@ -38,156 +38,14 @@
             font-size: 20px;
             font-weight: 600;
             color: #f5f5f5;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-        .top-nav .account-name .chevron {
-            color: #8e8e8e;
-            font-size: 14px;
-        }
-        .top-nav-actions {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .top-nav-actions a {
+        .top-nav a {
             color: #0095f6;
             font-weight: 600;
             font-size: 14px;
             text-decoration: none;
         }
-        .top-nav-actions .logout-link {
-            color: #0095f6;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-        }
-        .three-dots-btn {
-            background: none;
-            border: none;
-            color: #f5f5f5;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-        .three-dots-btn:hover {
-            background: #2a2a2a;
-        }
 
-        /* Three Dots Dropdown Menu */
-        .dropdown-menu {
-            position: absolute;
-            top: 55px;
-            right: 16px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 12px;
-            min-width: 260px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-            z-index: 9999;
-            display: none;
-            overflow: hidden;
-            padding: 6px 0;
-        }
-        .dropdown-menu.show {
-            display: block;
-        }
-        .dropdown-menu .menu-item {
-            padding: 10px 16px;
-            color: #e0e0e0;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            font-family: inherit;
-        }
-        .dropdown-menu .menu-item:hover {
-            background: #2a2a2a;
-        }
-        .dropdown-menu .menu-item.danger {
-            color: #ed4956;
-        }
-        .dropdown-menu .menu-item .icon {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-        .dropdown-menu .divider {
-            height: 1px;
-            background: #2a2a2a;
-            margin: 4px 0;
-        }
-
-        /* Profile Picture Lightbox */
-        .lightbox-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.92);
-            z-index: 99999;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        .lightbox-overlay.show {
-            display: flex;
-        }
-        .lightbox-overlay img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 8px;
-            object-fit: contain;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
-        }
-        .lightbox-overlay .close-lightbox {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            color: #f5f5f5;
-            font-size: 36px;
-            cursor: pointer;
-            font-weight: 300;
-            transition: 0.2s;
-        }
-        .lightbox-overlay .close-lightbox:hover {
-            transform: scale(1.2);
-        }
-
-        /* Scrollable Content Area */
-        .scroll-content {
-            flex: 1;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        .scroll-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        .scroll-content::-webkit-scrollbar-track {
-            background: #121212;
-        }
-        .scroll-content::-webkit-scrollbar-thumb {
-            background: #2a2a2a;
-            border-radius: 2px;
-        }
-
-        /* Profile Header */
         .profile-header {
             padding: 20px 16px 10px 16px;
             background: #121212;
@@ -197,30 +55,6 @@
             align-items: center;
             gap: 25px;
         }
-        .profile-pic-wrapper {
-            cursor: pointer;
-            position: relative;
-        }
-        .profile-pic-wrapper:hover .profile-pic {
-            opacity: 0.85;
-        }
-        .profile-pic-wrapper:hover .profile-pic-hint {
-            display: flex;
-        }
-        .profile-pic-hint {
-            display: none;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #f5f5f5;
-            font-size: 12px;
-            font-weight: 600;
-            background: rgba(0,0,0,0.5);
-            padding: 4px 12px;
-            border-radius: 4px;
-            pointer-events: none;
-        }
         .profile-pic {
             width: 80px;
             height: 80px;
@@ -229,7 +63,6 @@
             border: 2px solid #2a2a2a;
             flex-shrink: 0;
             background: #2a2a2a;
-            transition: 0.2s;
         }
         .profile-pic-placeholder {
             width: 80px;
@@ -243,7 +76,6 @@
             color: #666;
             flex-shrink: 0;
             border: 2px solid #2a2a2a;
-            cursor: pointer;
         }
         .profile-stats {
             display: flex;
@@ -351,33 +183,15 @@
             font-size: 14px;
             cursor: pointer;
             flex: 1;
-            transition: 0.2s;
         }
         .btn-message:hover { background: #1a1a1a; }
 
-        .suggestions {
-            padding: 12px 16px;
-            border-bottom: 1px solid #2a2a2a;
-        }
-        .suggestions .suggest-title {
-            color: #a8a8a8;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            justify-content: space-between;
-        }
-        .suggest-title a {
-            color: #0095f6;
-            text-decoration: none;
-            font-weight: 400;
-        }
-
-        /* Profile Tabs */
         .profile-tabs {
             display: flex;
             justify-content: space-around;
             padding: 0 16px;
             border-top: 1px solid #2a2a2a;
+            border-bottom: 1px solid #2a2a2a;
             background: #121212;
             flex-shrink: 0;
         }
@@ -387,7 +201,6 @@
             text-align: center;
             cursor: pointer;
             border-bottom: 2px solid transparent;
-            transition: 0.2s;
         }
         .profile-tabs .tab svg {
             width: 22px;
@@ -404,26 +217,12 @@
         .profile-tabs .tab.active svg {
             stroke: #f5f5f5;
         }
-        .profile-tabs .tab:hover svg {
-            stroke: #f5f5f5;
-        }
 
-        /* Tab Content */
         .tab-content {
             flex: 1;
             overflow-y: auto;
             background: #0a0a0a;
             min-height: 200px;
-        }
-        .tab-content::-webkit-scrollbar {
-            width: 4px;
-        }
-        .tab-content::-webkit-scrollbar-track {
-            background: #0a0a0a;
-        }
-        .tab-content::-webkit-scrollbar-thumb {
-            background: #2a2a2a;
-            border-radius: 2px;
         }
         .tab-panel {
             display: none;
@@ -433,69 +232,114 @@
             display: block;
         }
 
-        /* Product Grid */
+        /* ============================================ */
+        /* PRODUCT GRID - FIXED 3 COLUMNS              */
+        /* ============================================ */
         .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            padding: 2px;
-            background: #0a0a0a;
-        }
-        .product-card {
-            background: #1a1a1a;
-            text-align: center;
-            padding: 8px 4px;
-            border: 1px solid #2a2a2a;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .product-card:hover { opacity: 0.7; background: #252525; }
-        .product-card img {
-            width: 100%;
-            height: 130px;
-            object-fit: cover;
-            border-radius: 2px;
-            background: #2a2a2a;
-        }
-        .product-card .no-img {
-            height: 130px;
-            background: #2a2a2a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 14px;
-            border-radius: 2px;
-        }
-        .product-card h3 {
-            font-size: 11px;
-            margin: 6px 0 3px 0;
-            color: #e0e0e0;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .product-card .price {
-            font-weight: 700;
-            color: #f5f5f5;
-            font-size: 12px;
-        }
-        .product-card .original-price {
-            text-decoration: line-through;
-            color: #777;
-            font-size: 10px;
-            margin-left: 4px;
-        }
-        .product-card .discount {
-            color: #ed4956;
-            font-size: 10px;
-            margin-left: 4px;
-            font-weight: 600;
+            display: grid !important;
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 3px !important;
+            padding: 3px !important;
+            background: #0a0a0a !important;
         }
 
-        /* Empty States - No Icons */
+        .product-card {
+            background: #1a1a1a !important;
+            text-align: center !important;
+            padding: 8px 6px !important;
+            border: 1px solid #2a2a2a !important;
+            border-radius: 4px !important;
+            cursor: pointer !important;
+            transition: 0.2s !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            min-height: 200px !important;
+            width: 100% !important;
+        }
+        .product-card:hover {
+            opacity: 0.8 !important;
+            background: #252525 !important;
+        }
+        .product-card img {
+            width: 100% !important;
+            height: 130px !important;
+            object-fit: cover !important;
+            border-radius: 4px !important;
+            background: #2a2a2a !important;
+        }
+        .product-card .no-img {
+            width: 100% !important;
+            height: 130px !important;
+            background: #2a2a2a !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #666 !important;
+            font-size: 14px !important;
+            border-radius: 4px !important;
+        }
+        .product-card .product-name {
+            font-size: 11px !important;
+            margin: 6px 0 2px 0 !important;
+            color: #e0e0e0 !important;
+            font-weight: 500 !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            width: 100% !important;
+            min-height: 30px !important;
+        }
+        .product-card .price-row {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 3px !important;
+            width: 100% !important;
+        }
+        .product-card .product-price {
+            font-weight: 700 !important;
+            color: #f5f5f5 !important;
+            font-size: 13px !important;
+        }
+        .product-card .original-price {
+            text-decoration: line-through !important;
+            color: #777 !important;
+            font-size: 10px !important;
+        }
+        .product-card .discount {
+            color: #ed4956 !important;
+            font-size: 10px !important;
+            font-weight: 600 !important;
+        }
+
+        .shop-now-btn {
+            background: #0095f6 !important;
+            color: white !important;
+            border: none !important;
+            padding: 5px 8px !important;
+            border-radius: 4px !important;
+            font-weight: 600 !important;
+            font-size: 11px !important;
+            cursor: pointer !important;
+            width: 100% !important;
+            margin-top: 6px !important;
+            transition: 0.2s !important;
+        }
+        .shop-now-btn:hover {
+            background: #0077c2 !important;
+        }
+
+        .product-link {
+            text-decoration: none !important;
+            color: inherit !important;
+            display: block !important;
+            width: 100% !important;
+        }
+
         .empty-state {
             display: flex;
             flex-direction: column;
@@ -518,15 +362,18 @@
             max-width: 280px;
             line-height: 1.6;
         }
-        .empty-state .empty-subtitle a {
-            color: #0095f6;
-            text-decoration: none;
-        }
-        .empty-state .empty-subtitle a:hover {
-            text-decoration: underline;
+
+        /* Seller label for own products */
+        .seller-label {
+            color: #8e8e8e !important;
+            font-size: 10px !important;
+            margin-top: 4px !important;
+            background: #2a2a2a !important;
+            padding: 2px 8px !important;
+            border-radius: 4px !important;
+            display: inline-block !important;
         }
 
-        /* Responsive */
         @media (max-width: 420px) {
             .phone-frame {
                 width: 100%;
@@ -535,78 +382,35 @@
                 border: none;
             }
             body { padding-top: 0; }
+            .product-card img { height: 100px !important; }
+            .product-card { min-height: 160px !important; }
+            .product-grid {
+                gap: 2px !important;
+                padding: 2px !important;
+            }
         }
     </style>
 </head>
 <body>
     <div class="phone-frame">
         
-        <!-- Top Nav - ACCOUNT NAME + THREE DOTS -->
+        <!-- Top Nav -->
         <div class="top-nav">
-            <div class="account-name">
-                {{ seller.username }}
-                <!-- <span class="chevron">▼</span> -->
-            </div>
-            <div class="top-nav-actions">
-                <a href="{% url 'logout' %}" class="logout-link">Logout</a>
-                <button class="three-dots-btn" id="threeDotsBtn">⋮</button>
-            </div>
-        </div>
-
-        <!-- Three Dots Dropdown Menu -->
-        <div class="dropdown-menu" id="dropdownMenu">
-            <button class="menu-item" data-action="restrict">
-                Restrict
-            </button>
-            <button class="menu-item" data-action="block">
-                Block
-            </button>
-            <button class="menu-item danger" data-action="report">
-                Report
-            </button>
-            <div class="divider"></div>
-            <button class="menu-item" data-action="about">
-                About this account
-            </button>
-            <button class="menu-item" data-action="hide-story">
-                Hide your story
-            </button>
-            <div class="divider"></div>
-            <button class="menu-item" data-action="copy-url">
-                Copy profile URL
-            </button>
-            <button class="menu-item" data-action="share">
-                Share this profile
-            </button>
-            <button class="menu-item" data-action="qr">
-                QR code
-            </button>
-        </div>
-
-        <!-- Profile Picture Lightbox -->
-        <div class="lightbox-overlay" id="lightboxOverlay">
-            <span class="close-lightbox" id="closeLightbox">✕</span>
-            {% if seller.profile_picture %}
-                <img src="{{ seller.profile_picture.url }}" alt="{{ seller.username }}" id="lightboxImage">
-            {% else %}
-                <div style="color:#f5f5f5; font-size:64px;">📸</div>
-            {% endif %}
+            <span class="account-name">{{ seller.username }}</span>
+            <a href="{% url 'logout' %}">Logout</a>
         </div>
 
         <!-- Profile Header -->
         <div class="profile-header">
             <div class="profile-row">
-                <div class="profile-pic-wrapper" id="profilePicWrapper">
-                    {% if seller.profile_picture %}
-                        <img src="{{ seller.profile_picture.url }}" alt="{{ seller.username }}" class="profile-pic" id="profilePic">
-                    {% else %}
-                        <div class="profile-pic-placeholder">📸</div>
-                    {% endif %}
-                    <div class="profile-pic-hint">View</div>
-                </div>
+                {% if seller.profile_picture %}
+                    <img src="{{ seller.profile_picture.url }}" alt="{{ seller.username }}" class="profile-pic">
+                {% else %}
+                    <div class="profile-pic-placeholder">📸</div>
+                {% endif %}
                 <div class="profile-stats">
                     <div class="stat">
-                        <strong id="post-count">{{ products|length }}</strong>
+                        <strong>{{ products|length }}</strong>
                         <span>posts</span>
                     </div>
                     <div class="stat">
@@ -652,17 +456,9 @@
             </div>
         </div>
 
-        <!-- Suggestions Row -->
-        <div class="suggestions">
-            <div class="suggest-title">
-                Suggested for you
-                <a href="#">See all</a>
-            </div>
-        </div>
-
-        <!-- Profile Tabs -->
-        <div class="profile-tabs" id="profileTabs">
-            <div class="tab active" data-tab="posts">
+        <!-- Tabs -->
+        <div class="profile-tabs">
+            <div class="tab active">
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="3" width="7" height="7" rx="1"/>
                     <rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -670,7 +466,7 @@
                     <rect x="14" y="14" width="7" height="7" rx="1"/>
                 </svg>
             </div>
-            <div class="tab" data-tab="reposts">
+            <div class="tab">
                 <svg viewBox="0 0 24 24">
                     <polyline points="17,4 20,7 17,10" />
                     <path d="M20 7 L4 7 C4 4 5 3 8 3" />
@@ -678,7 +474,7 @@
                     <path d="M4 17 L20 17 C20 20 19 21 16 21" />
                 </svg>
             </div>
-            <div class="tab" data-tab="tagged">
+            <div class="tab">
                 <svg viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2"/>
                     <circle cx="12" cy="10" r="4"/>
@@ -687,362 +483,65 @@
             </div>
         </div>
 
-        <!-- Tab Content -->
-        <div class="tab-content" id="tabContent">
-            
-            <!-- POSTS PANEL -->
-            <div class="tab-panel active" id="panel-posts">
+        <!-- Product Grid -->
+        <div class="tab-content">
+            <div class="tab-panel active">
                 {% if products %}
-                <div class="product-grid" id="productGrid">
+                <div class="product-grid">
                     {% for product in products %}
-                    <a href="{% url 'product_detail' product.id %}" style="text-decoration: none; color: inherit; display: block;">
+                    <a href="{% url 'product_detail' product.id %}" class="product-link">
                         <div class="product-card">
                             {% if product.image %}
                                 <img src="{{ product.image.url }}" alt="{{ product.name }}">
                             {% else %}
                                 <div class="no-img">📷 No Image</div>
                             {% endif %}
-                            <h3>{{ product.name }}</h3>
-                            <div>
-                                <span class="price">₹{{ product.price }}</span>
+                            <div class="product-name">{{ product.name }}</div>
+                            <div class="price-row">
+                                <span class="product-price">₹{{ product.price }}</span>
                                 {% if product.original_price %}
                                     <span class="original-price">₹{{ product.original_price }}</span>
                                     <span class="discount">{{ product.discount_percent }}% off</span>
                                 {% endif %}
                             </div>
+                            <!-- Shop Now button: visible to buyers, hidden for sellers -->
+                            {% if not user.is_authenticated or user.role != 'seller' %}
+                                <button class="shop-now-btn" onclick="event.stopPropagation(); window.location.href='{% url 'checkout' product.id %}';">Shop Now</button>
+                            {% else %}
+                                <span class="seller-label">📦 Your Product</span>
+                            {% endif %}
                         </div>
                     </a>
                     {% endfor %}
                 </div>
                 {% else %}
-                <div class="empty-state no-posts">
+                <div class="empty-state">
                     <div class="empty-title">No Posts Yet</div>
-                    <div class="empty-subtitle">When you share photos, they will appear here.</div>
+                    <div class="empty-subtitle">When products are added, they will appear here.</div>
                 </div>
                 {% endif %}
             </div>
-
-            <!-- REPOSTS PANEL -->
-            <div class="tab-panel" id="panel-reposts">
-                <div class="empty-state no-reposts">
-                    <div class="empty-title">No reposts</div>
-                    <div class="empty-subtitle">There are no reposts to show.</div>
-                </div>
-            </div>
-
-            <!-- TAGGED PANEL -->
-            <div class="tab-panel" id="panel-tagged">
-                <div class="empty-state no-posts">
-                    <div class="empty-title">No Posts Yet</div>
-                    <div class="empty-subtitle">When you are tagged in photos, they will appear here.</div>
-                </div>
-            </div>
-
         </div>
 
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // ==================== THREE DOTS DROPDOWN ====================
-            const threeDotsBtn = document.getElementById('threeDotsBtn');
-            const dropdownMenu = document.getElementById('dropdownMenu');
-            let dropdownOpen = false;
-
-            threeDotsBtn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownOpen = !dropdownOpen;
-                dropdownMenu.classList.toggle('show', dropdownOpen);
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!dropdownMenu.contains(e.target) && e.target !== threeDotsBtn) {
-                    dropdownMenu.classList.remove('show');
-                    dropdownOpen = false;
-                }
-            });
-
-            // Menu item actions
-            document.querySelectorAll('.dropdown-menu .menu-item').forEach(item => {
-                item.addEventListener('click', function(e) {
-                    const action = this.dataset.action;
-                    const label = this.textContent.trim();
-                    dropdownMenu.classList.remove('show');
-                    dropdownOpen = false;
-                    
-                    // Different actions
-                    switch(action) {
-                        case 'restrict':
-                            showToast('🔒 Account restricted');
-                            break;
-                        case 'block':
-                            if (confirm('Are you sure you want to block luxe.boutique?')) {
-                                showToast('⛔ Account blocked');
-                            }
-                            break;
-                        case 'report':
-                            showToast('⚠️ Report submitted');
-                            break;
-                        case 'about':
-                            showToast('ℹ️ About this account');
-                            break;
-                        case 'hide-story':
-                            showToast('👻 Story hidden');
-                            break;
-                        case 'copy-url':
-                            navigator.clipboard.writeText(window.location.href).then(() => {
-                                showToast('📋 Profile URL copied!');
-                            });
-                            break;
-                        case 'share':
-                            if (navigator.share) {
-                                navigator.share({
-                                    title: '{{ seller.username }} on Instagram',
-                                    url: window.location.href
-                                });
-                            } else {
-                                showToast('📤 Share this profile');
-                            }
-                            break;
-                        case 'qr':
-                            showToast('📱 QR Code coming soon!');
-                            break;
-                        default:
-                            showToast(label);
-                    }
-                });
-            });
-
-            // ==================== PROFILE PICTURE LIGHTBOX ====================
-            const profilePicWrapper = document.getElementById('profilePicWrapper');
-            const lightboxOverlay = document.getElementById('lightboxOverlay');
-            const closeLightbox = document.getElementById('closeLightbox');
-
-            if (profilePicWrapper) {
-                profilePicWrapper.addEventListener('click', function() {
-                    lightboxOverlay.classList.add('show');
-                });
+        // Follow button toggle
+        document.getElementById('followBtn')?.addEventListener('click', function() {
+            if (this.textContent === 'Follow') {
+                this.textContent = 'Following';
+                this.classList.add('following');
+            } else {
+                this.textContent = 'Follow';
+                this.classList.remove('following');
             }
+        });
 
-            // Close lightbox
-            function closeLightboxFunc() {
-                lightboxOverlay.classList.remove('show');
-            }
-
-            closeLightbox.addEventListener('click', closeLightboxFunc);
-            lightboxOverlay.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeLightboxFunc();
-                }
-            });
-
-            // Close with Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    closeLightboxFunc();
-                }
-            });
-
-            // ==================== TAB SWITCHING ====================
-            const tabs = document.querySelectorAll('.tab');
-            const panels = {
-                'posts': document.getElementById('panel-posts'),
-                'reposts': document.getElementById('panel-reposts'),
-                'tagged': document.getElementById('panel-tagged')
-            };
-
-            tabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    tabs.forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    Object.values(panels).forEach(p => p.classList.remove('active'));
-                    
-                    const tabName = this.dataset.tab;
-                    if (panels[tabName]) {
-                        panels[tabName].classList.add('active');
-                    }
-                });
-            });
-
-            // ==================== FOLLOW BUTTON TOGGLE ====================
-            const followBtn = document.getElementById('followBtn');
-            if (followBtn) {
-                followBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    if (this.textContent === 'Follow') {
-                        this.textContent = 'Following';
-                        this.classList.add('following');
-                        showToast('You are now following luxe.boutique!');
-                    } else {
-                        this.textContent = 'Follow';
-                        this.classList.remove('following');
-                        showToast('Unfollowed luxe.boutique');
-                    }
-                });
-            }
-
-            // ==================== MESSAGE BUTTON ====================
-            const messageBtn = document.getElementById('messageBtn');
-            if (messageBtn) {
-                messageBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    showChatPopup();
-                });
-            }
-
-            // ==================== TOAST NOTIFICATION ====================
-            function showToast(message) {
-                const existingToast = document.getElementById('toast');
-                if (existingToast) existingToast.remove();
-                
-                const toast = document.createElement('div');
-                toast.id = 'toast';
-                toast.innerHTML = message;
-                toast.style.cssText = `
-                    position: fixed;
-                    bottom: 30px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: #1a1a1a;
-                    color: #f5f5f5;
-                    padding: 12px 24px;
-                    border-radius: 8px;
-                    border: 1px solid #2a2a2a;
-                    font-size: 14px;
-                    z-index: 99999;
-                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-                    animation: fadeInUp 0.3s ease;
-                `;
-                document.body.appendChild(toast);
-                
-                setTimeout(() => {
-                    toast.style.opacity = '0';
-                    toast.style.transition = 'opacity 0.3s';
-                    setTimeout(() => toast.remove(), 300);
-                }, 3000);
-            }
-
-            // ==================== CHAT POPUP ====================
-            function showChatPopup() {
-                const existingChat = document.getElementById('chat-popup');
-                if (existingChat) {
-                    existingChat.style.display = existingChat.style.display === 'none' ? 'block' : 'none';
-                    return;
-                }
-                
-                const chat = document.createElement('div');
-                chat.id = 'chat-popup';
-                chat.innerHTML = `
-                    <div style="
-                        position: fixed;
-                        bottom: 100px;
-                        right: 20px;
-                        width: 320px;
-                        max-width: 90%;
-                        background: #1a1a1a;
-                        border: 1px solid #2a2a2a;
-                        border-radius: 12px;
-                        box-shadow: 0 8px 24px rgba(0,0,0,0.8);
-                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                        z-index: 99998;
-                        overflow: hidden;
-                    ">
-                        <div style="
-                            background: #121212;
-                            padding: 12px 16px;
-                            border-bottom: 1px solid #2a2a2a;
-                            display: flex;
-                            justify-content: space-between;
-                            align-items: center;
-                        ">
-                            <span style="color: #f5f5f5; font-weight: 600; font-size: 16px;">💬 luxe.boutique</span>
-                            <span id="close-chat" style="color: #8e8e8e; cursor: pointer; font-size: 20px;">✕</span>
-                        </div>
-                        <div style="
-                            padding: 16px;
-                            height: 250px;
-                            overflow-y: auto;
-                            background: #121212;
-                        ">
-                            <div style="color: #8e8e8e; text-align: center; font-size: 13px; margin-bottom: 16px;">
-                                You are now connected with luxe.boutique
-                            </div>
-                            <div style="
-                                background: #0095f6;
-                                color: white;
-                                padding: 8px 12px;
-                                border-radius: 12px 12px 12px 4px;
-                                max-width: 80%;
-                                margin-bottom: 8px;
-                                font-size: 14px;
-                            ">
-                                👋 Hi! How can I help you with our products?
-                            </div>
-                            <div style="
-                                background: #2a2a2a;
-                                color: #f5f5f5;
-                                padding: 8px 12px;
-                                border-radius: 12px 12px 4px 12px;
-                                max-width: 80%;
-                                margin-left: auto;
-                                margin-bottom: 8px;
-                                font-size: 14px;
-                            ">
-                                I'm interested in the handbag!
-                            </div>
-                        </div>
-                        <div style="
-                            padding: 12px 16px;
-                            border-top: 1px solid #2a2a2a;
-                            display: flex;
-                            gap: 8px;
-                            background: #121212;
-                        ">
-                            <input type="text" placeholder="Type a message..." style="
-                                flex: 1;
-                                padding: 8px 12px;
-                                background: #1a1a1a;
-                                border: 1px solid #2a2a2a;
-                                border-radius: 20px;
-                                color: #f5f5f5;
-                                font-size: 14px;
-                                outline: none;
-                            ">
-                            <button style="
-                                background: #0095f6;
-                                color: white;
-                                border: none;
-                                border-radius: 20px;
-                                padding: 8px 16px;
-                                font-weight: 600;
-                                cursor: pointer;
-                            ">Send</button>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(chat);
-                
-                document.getElementById('close-chat').addEventListener('click', function() {
-                    chat.style.display = 'none';
-                });
-            }
-
-            // Add CSS animations
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeInUp {
-                    from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-                    to { opacity: 1; transform: translateX(-50%) translateY(0); }
-                }
-            `;
-            document.head.appendChild(style);
-
-            console.log('✅ Instagram clone loaded!');
+        // Message button
+        document.getElementById('messageBtn')?.addEventListener('click', function() {
+            alert('💬 Message to {{ seller.username }}');
         });
     </script>
-
+    <script src="/static/js/notifications.js"></script>
 </body>
 </html>

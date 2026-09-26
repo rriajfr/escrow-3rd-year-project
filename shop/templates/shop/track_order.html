@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Track Your Order</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 780px;
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .header .back-link { 
+            color: #0095f6; 
+            text-decoration: none; 
+            font-weight: 600; 
+            font-size: 14px; 
+        }
+        .header .back-link:hover { text-decoration: underline; }
+        .header .title { font-size: 20px; font-weight: 600; color: #f5f5f5; }
+
+        .search-section {
+            padding: 24px;
+            background: #121212;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .search-section .search-label {
+            color: #8e8e8e;
+            font-size: 14px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+        }
+        .search-box input {
+            flex: 1;
+            padding: 14px 18px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 10px;
+            font-size: 15px;
+            color: #f5f5f5;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        .search-box input:focus { border-color: #0095f6; }
+        .search-box input::placeholder {
+            color: #555;
+            font-weight: 400;
+            letter-spacing: normal;
+            text-transform: none;
+        }
+        .search-box button {
+            padding: 14px 28px;
+            background: #0095f6;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .search-box button:hover { background: #0077c2; }
+
+        .error-msg {
+            background: #ed495620;
+            border: 1px solid #ed495640;
+            color: #ed4956;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .hint {
+            color: #555;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .hint code {
+            background: #1a1a1a;
+            padding: 2px 8px;
+            border-radius: 4px;
+            color: #0095f6;
+            font-family: monospace;
+        }
+
+        .recent-section { padding: 20px 24px; }
+        .recent-section .section-title {
+            color: #8e8e8e;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            text-decoration: none;
+            color: inherit;
+            transition: 0.2s;
+        }
+        .order-item:hover {
+            background: #252525;
+            border-color: #3a3a3a;
+        }
+        .order-item .left { flex: 1; }
+        .order-item .tracking-id {
+            color: #0095f6;
+            font-weight: 600;
+            font-size: 14px;
+            font-family: monospace;
+        }
+        .order-item .product {
+            color: #8e8e8e;
+            font-size: 12px;
+            margin-top: 2px;
+        }
+        .order-item .status-badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 10px;
+        }
+        .status-badge.paid { background: #00a86b20; color: #00a86b; border: 1px solid #00a86b40; }
+        .status-badge.shipped { background: #0095f620; color: #0095f6; border: 1px solid #0095f640; }
+        .status-badge.delivered { background: #00a86b20; color: #00a86b; border: 1px solid #00a86b40; }
+        .status-badge.processing { background: #0095f620; color: #0095f6; border: 1px solid #0095f640; }
+        .status-badge.out_for_delivery { background: #f5a62320; color: #f5a623; border: 1px solid #f5a62340; }
+        .status-badge.pending { background: #8e8e8e20; color: #8e8e8e; border: 1px solid #8e8e8e40; }
+
+        .empty-recent {
+            color: #555;
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .header { flex-wrap: wrap; gap: 8px; }
+            .search-box { flex-direction: column; }
+            .search-box button { width: 100%; }
+            .search-section, .recent-section { padding: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'buyer_dashboard' %}" class="back-link">← Back</a>
+            <span class="title">🔍 Track Your Order</span>
+        </div>
+
+        <div class="search-section">
+            <label class="search-label">Enter your Tracking ID to see order status:</label>
+            <form method="post" class="search-box">
+                {% csrf_token %}
+                <input type="text" name="tracking_id" placeholder="e.g., ORD-2026-0001" 
+                       value="{{ request.POST.tracking_id|default:'' }}" 
+                       autocomplete="off" autofocus>
+                <button type="submit">Track</button>
+            </form>
+
+            {% if error %}
+                <div class="error-msg">{{ error }}</div>
+            {% endif %}
+
+            <div class="hint">
+                💡 Your tracking ID was shown when you placed the order. Format: <code>ORD-YYYY-XXXX</code>
+            </div>
+        </div>
+
+        <div class="recent-section">
+            <div class="section-title">📦 Recent Orders</div>
+            {% if recent_orders %}
+                {% for order in recent_orders %}
+                <a href="{% url 'order_tracking_detail' order.id %}" class="order-item">
+                    <div class="left">
+                        <div class="tracking-id">{{ order.tracking_number }}</div>
+                        <div class="product">{{ order.product_name }}</div>
+                    </div>
+                    <span class="status-badge {{ order.status|lower }}">{{ order.get_status_display }}</span>
+                </a>
+                {% endfor %}
+            {% else %}
+                <div class="empty-recent">No orders placed yet.</div>
+            {% endif %}
+        </div>
+    </div>
+    <script src="/static/js/notifications.js"></script>
+</body>
+</html>

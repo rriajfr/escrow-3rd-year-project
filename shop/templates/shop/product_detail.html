@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +7,7 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background: #0a0a0a; 
+            background: #0a0a0a;
             display: flex; 
             justify-content: center; 
             align-items: flex-start; 
@@ -14,19 +15,23 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
         .phone-frame {
-            width: 400px;
+            width: 780px;
+            max-height: 95vh;
             background: #121212;
             border: 1px solid #2a2a2a;
-            border-radius: 16px;
+            border-radius: 4px;
             overflow: hidden;
             box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+            display: flex;
+            flex-direction: column;
         }
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 20px;
+            padding: 14px 16px;
             border-bottom: 1px solid #2a2a2a;
+            flex-shrink: 0;
         }
         .top-nav .logo {
             font-family: 'Grand Hotel', cursive;
@@ -116,6 +121,7 @@
             font-weight: 600;
             text-decoration: none;
         }
+        .back-btn:hover { text-decoration: underline; }
         .no-img {
             width: 100%;
             height: 300px;
@@ -125,6 +131,16 @@
             justify-content: center;
             color: #666;
             font-size: 20px;
+        }
+        .your-product-label {
+            color: #8e8e8e;
+            font-size: 13px;
+            text-align: center;
+            background: #2a2a2a;
+            padding: 10px 16px;
+            border-radius: 6px;
+            display: inline-block;
+            width: 100%;
         }
     </style>
 </head>
@@ -167,13 +183,19 @@
             </div>
         </div>
 
+        <!-- ✅ Shop Now button hidden for sellers -->
         <div class="shop-btn-container">
-            <a href="{% url 'checkout' product.id %}" style="text-decoration: none;">
-                <button class="shop-now-btn">Shop Now</button>
-            </a>
+            {% if not user.is_authenticated or user.role != 'seller' %}
+                <a href="{% url 'checkout' product.id %}" style="text-decoration: none;">
+                    <button class="shop-now-btn">Shop Now</button>
+                </a>
+            {% else %}
+                <div class="your-product-label">📦 This is your product</div>
+            {% endif %}
         </div>
 
         <a href="{% url 'shop' %}" class="back-btn">⬅ Back to Shop</a>
     </div>
+    <script src="/static/js/notifications.js"></script>
 </body>
 </html>

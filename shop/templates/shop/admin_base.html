@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin - EscrowGrm{% endblock %}</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="admin-theme">
+
+<nav class="admin-navbar d-flex justify-content-between align-items-center">
+    <a href="{% url 'admin_dashboard' %}" class="navbar-brand fw-bold text-white m-0">
+        <i class="fas fa-shield-alt"></i> EscrowGrm Admin
+    </a>
+    <div class="d-flex align-items-center">
+        <a href="{% url 'admin_dashboard' %}">Dashboard</a>
+        <a href="{% url 'admin_orders' %}">Orders</a>
+        <a href="{% url 'escrow_dashboard' %}">Escrow</a>
+        <a href="{% url 'admin_disputes' %}">Disputes</a>
+        <a href="{% url 'admin_user_list' %}">Users</a>
+        <a href="{% url 'logout' %}" class="ms-3"><i class="fas fa-sign-out-alt"></i></a>
+    </div>
+</nav>
+
+<div class="container py-5">
+    {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

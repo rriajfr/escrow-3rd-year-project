@@ -1,0 +1,42 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Submit Return Tracking{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-truck"></i> Submit Return Tracking</h4>
+            </div>
+            <div class="card-body p-4">
+
+                <div class="alert" style="border-left: 4px solid #f39c12;">
+                    <strong>Order #{{ order.id }}</strong> — {{ order.product_name }}<br>
+                    <small class="text-muted">
+                        Your dispute was approved. Ship the item back to the seller and submit the tracking below.
+                        The refund of <strong>₹{{ order.total_amount }}</strong> will be processed once the seller confirms receipt.
+                    </small>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Return Carrier</label>
+                        <input type="text" name="return_carrier" class="form-control" placeholder="e.g., BlueDart, DTDC, India Post" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Return Tracking Number</label>
+                        <input type="text" name="return_tracking_number" class="form-control" placeholder="e.g., BD123456789" required>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit Return Tracking</button>
+                        <a href="{% url 'order_tracking_detail' order.id %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/notifications.js"></script>
+{% endblock %}

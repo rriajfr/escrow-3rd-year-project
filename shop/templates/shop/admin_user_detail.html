@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Profile - {{ profile_user.username }}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            background: #0a0a0a;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 700px;
+            background: #121212;
+            border: 1px solid #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            min-height: 100vh;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .header .back-link {
+            color: #0095f6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .header .back-link:hover { text-decoration: underline; }
+        .header .title { font-size: 20px; font-weight: 600; color: #f5f5f5; }
+        .header .user-role {
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 12px;
+            background: #0095f620;
+            color: #0095f6;
+            border: 1px solid #0095f640;
+        }
+        .header .user-role.seller { background: #f5a62320; color: #f5a623; border: 1px solid #f5a62340; }
+        .header .user-role.admin { background: #ed495620; color: #ed4956; border: 1px solid #ed495640; }
+
+        .profile-section { padding: 24px; }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-bottom: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #2a2a2a;
+            background: #2a2a2a;
+        }
+        .profile-pic-placeholder {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #2a2a2a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #666;
+            border: 2px solid #2a2a2a;
+        }
+        .profile-info .name { font-size: 24px; font-weight: 600; color: #f5f5f5; }
+        .profile-info .username { color: #8e8e8e; font-size: 14px; margin-top: 4px; }
+        .profile-info .bio { color: #e0e0e0; font-size: 14px; margin-top: 8px; line-height: 1.5; }
+        .profile-info .details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 12px;
+        }
+        .profile-info .details .detail {
+            font-size: 13px;
+            color: #8e8e8e;
+        }
+        .profile-info .details .detail strong { color: #f5f5f5; }
+
+        .section-title {
+            color: #8e8e8e;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 20px 0 12px 0;
+        }
+
+        .list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            margin-bottom: 6px;
+        }
+        .list-item .info { flex: 1; }
+        .list-item .info .name { color: #f5f5f5; font-weight: 500; font-size: 14px; }
+        .list-item .info .desc { color: #8e8e8e; font-size: 12px; }
+        .list-item .badge {
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
+        .list-item .badge.pending { background: #f5a62320; color: #f5a623; border: 1px solid #f5a62340; }
+        .list-item .badge.delivered { background: #00a86b20; color: #00a86b; border: 1px solid #00a86b40; }
+        .list-item .badge.shipped { background: #0095f620; color: #0095f6; border: 1px solid #0095f640; }
+
+        .empty-state { text-align: center; padding: 30px; color: #8e8e8e; font-size: 14px; }
+
+        @media (max-width: 600px) {
+            .profile-header { flex-direction: column; text-align: center; }
+            .profile-info .details { justify-content: center; }
+            .header { flex-wrap: wrap; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="{% url 'admin_dashboard' %}" class="back-link">← Back to Dashboard</a>
+            <span class="title">{{ profile_user.username }}</span>
+            <span class="user-role {% if profile_user.role == 'seller' %}seller{% elif profile_user.is_superuser %}admin{% endif %}">
+                {{ profile_user.role|capfirst }}
+            </span>
+        </div>
+
+        <div class="profile-section">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                {% if profile_user.profile_picture %}
+                    <img src="{{ profile_user.profile_picture.url }}" alt="{{ profile_user.username }}" class="profile-pic">
+                {% else %}
+                    <div class="profile-pic-placeholder">📸</div>
+                {% endif %}
+                <div class="profile-info">
+                    <div class="name">{{ profile_user.get_full_name|default:profile_user.username }}</div>
+                    <div class="username">@{{ profile_user.username }}</div>
+                    {% if profile_user.bio %}
+                        <div class="bio">{{ profile_user.bio }}</div>
+                    {% endif %}
+                    <div class="details">
+                        {% if profile_user.email %}
+                            <span class="detail">📧 <strong>{{ profile_user.email }}</strong></span>
+                        {% endif %}
+                        {% if profile_user.phone %}
+                            <span class="detail">📞 <strong>{{ profile_user.phone }}</strong></span>
+                        {% endif %}
+                        {% if profile_user.location %}
+                            <span class="detail">📍 <strong>{{ profile_user.location }}</strong></span>
+                        {% endif %}
+                        <span class="detail">📅 Joined <strong>{{ profile_user.date_joined|date:"M d, Y" }}</strong></span>
+                    </div>
+                    {% if profile_user.business_category %}
+                        <div style="margin-top:8px; color:#0095f6; font-weight:600; font-size:14px;">
+                            🏷️ {{ profile_user.business_category }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Orders (if buyer) -->
+            {% if orders %}
+            <div class="section-title">📦 Recent Orders</div>
+            {% for order in orders %}
+            <div class="list-item">
+                <div class="info">
+                    <div class="name">Order #{{ order.id }} — {{ order.product_name }}</div>
+                    <div class="desc">₹{{ order.total_amount|floatformat:2 }} • {{ order.created_at|date:"M d, Y" }}</div>
+                </div>
+                <span class="badge {% if order.status == 'DELIVERED' %}delivered{% elif order.status == 'SHIPPED' %}shipped{% else %}pending{% endif %}">
+                    {{ order.get_status_display }}
+                </span>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <!-- Products (if seller) -->
+            {% if products %}
+            <div class="section-title">🛍️ Products Listed</div>
+            {% for product in products %}
+            <div class="list-item">
+                <div class="info">
+                    <div class="name">{{ product.name }}</div>
+                    <div class="desc">₹{{ product.price }} • {{ product.category }}</div>
+                </div>
+                <span class="badge" style="background:#00a86b20; color:#00a86b; border:1px solid #00a86b40;">
+                    {{ product.created_at|date:"M d, Y" }}
+                </span>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% if not orders and not products %}
+            <div class="empty-state">
+                <div style="font-size:48px; margin-bottom:12px;">👤</div>
+                <div>No orders or products yet.</div>
+                <div style="font-size:13px; color:#555; margin-top:4px;">This user hasn't made any purchases or listed any products.</div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

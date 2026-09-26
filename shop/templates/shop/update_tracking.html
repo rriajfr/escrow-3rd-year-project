@@ -1,0 +1,171 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Update Tracking - Order #{{ order.id }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="mb-1">Update Order #{{ order.id }}</h2>
+                <p class="text-muted mb-0"><i class="fas fa-box"></i> {{ order.tracking_number }}</p>
+            </div>
+            <a href="{% url 'seller_orders' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Back
+            </a>
+        </div>
+
+        <!-- Product Context -->
+        <div class="card mb-3" style="background: rgba(0,149,246,0.1); border: 1px solid #0095f6;">
+            <div class="card-body p-3">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                        <strong style="color: #fff;">{{ order.product_name }}</strong>
+                        <p class="text-muted small mb-0">
+                            Buyer: {{ order.full_name }} ({{ order.city }}) | Qty: {{ order.quantity }}
+                        </p>
+                    </div>
+                    <div class="text-end">
+                        <strong style="color: #0095f6; font-size: 18px;">₹{{ order.total_amount }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Update Form -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-edit"></i> Shipping Details</h5>
+            </div>
+            <div class="card-body p-4">
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- 1. Tracking Company -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Shipping Company</label>
+                        <select name="tracking_company" class="form-select" required
+                                {% if order.tracking_company %}disabled{% endif %}>
+                            <option value="">— Select a courier —</option>
+                            <option value="BlueDart" {% if order.tracking_company == 'BlueDart' %}selected{% endif %}>BlueDart</option>
+                            <option value="Delhivery" {% if order.tracking_company == 'Delhivery' %}selected{% endif %}>Delhivery</option>
+                            <option value="DTDC" {% if order.tracking_company == 'DTDC' %}selected{% endif %}>DTDC</option>
+                            <option value="India Post" {% if order.tracking_company == 'India Post' %}selected{% endif %}>India Post</option>
+                            <option value="Ekart" {% if order.tracking_company == 'Ekart' %}selected{% endif %}>Ekart</option>
+                            <option value="XpressBees" {% if order.tracking_company == 'XpressBees' %}selected{% endif %}>XpressBees</option>
+                            <option value="Amazon Shipping" {% if order.tracking_company == 'Amazon Shipping' %}selected{% endif %}>Amazon Shipping</option>
+                            <option value="DHL" {% if order.tracking_company == 'DHL' %}selected{% endif %}>DHL</option>
+                            <option value="FedEx" {% if order.tracking_company == 'FedEx' %}selected{% endif %}>FedEx</option>
+                            <option value="Other" {% if order.tracking_company == 'Other' %}selected{% endif %}>Other</option>
+                        </select>
+                        {% if order.tracking_company %}
+                            <!-- Hidden field so the value still submits when the select is disabled -->
+                            <input type="hidden" name="tracking_company" value="{{ order.tracking_company }}">
+                            <small class="text-muted">Courier cannot be changed after it's set.</small>
+                        {% else %}
+                            <small class="text-muted">Choose the courier that's delivering this order.</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- 2. Estimated Delivery Days -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Estimated Delivery (Days)</label>
+                        {% if not order.estimated_delivery_days %}
+                            <input type="number" name="estimated_delivery_days" class="form-control"
+                                   value="5" min="1" max="30" required>
+                            <small class="text-muted">How many days until the package arrives?</small>
+                        {% else %}
+                            <input type="number" class="form-control"
+                                   value="{{ order.estimated_delivery_days }}" disabled>
+                            <input type="hidden" name="estimated_delivery_days" value="{{ order.estimated_delivery_days }}">
+                            <small class="text-muted">Estimated delivery days cannot be changed.</small>
+                        {% endif %}
+                    </div>
+
+                    <!-- 3. Order Status -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Order Status</label>
+                        <select name="status" class="form-select" required>
+                            {% for value, label in status_choices %}
+                                {% if value != 'DELIVERED' %}
+                                    <option value="{{ value }}" {% if order.status == value %}selected{% endif %}>
+                                        {{ label }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        <small class="d-block mt-2" style="color: #f39c12;">
+                            <i class="fas fa-info-circle"></i>
+                            When you mark the order as <strong>"Out for Delivery"</strong>, the buyer 
+                            will be notified to confirm receipt. Only the buyer can mark the order as Delivered.
+                        </small>
+                    </div>
+
+                    <!-- 4. Delivery Timing -->
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Delivery Timing</label>
+                        <div class="form-check">
+                            <input type="radio" name="delivery_status" value="on_time"
+                                   class="form-check-input" id="onTime"
+                                   {% if not order.is_delayed %}checked{% endif %}>
+                            <label class="form-check-label" for="onTime">On Time</label>
+                        </div>
+                        <div class="form-check">
+                            <input type="radio" name="delivery_status" value="delayed"
+                                   class="form-check-input" id="delayed"
+                                   {% if order.is_delayed %}checked{% endif %}>
+                            <label class="form-check-label" for="delayed">Delayed</label>
+                        </div>
+                    </div>
+
+                    <!-- 5. Delay Days (only if delayed) -->
+                    <div class="mb-3" id="delayDays"
+                         style="display: {% if order.is_delayed %}block{% else %}none{% endif %};">
+                        <label class="form-label fw-bold">Number of Days Delayed</label>
+                        <input type="number" name="delay_days" class="form-control"
+                               min="1" max="60"
+                               value="{{ order.delay_days|default:'' }}"
+                               placeholder="e.g., 3">
+                        <small class="text-muted">The buyer will be notified of the new estimated date.</small>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save"></i> Update Order
+                        </button>
+                        <a href="{% url 'seller_orders' %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Toggle the "Delay Days" field based on the radio selection
+    const onTime = document.getElementById('onTime');
+    const delayed = document.getElementById('delayed');
+    const delayDays = document.getElementById('delayDays');
+
+    function toggleDelay() {
+        if (delayed && delayed.checked) {
+            delayDays.style.display = 'block';
+        } else {
+            delayDays.style.display = 'none';
+        }
+    }
+
+    if (onTime) onTime.addEventListener('change', toggleDelay);
+    if (delayed) delayed.addEventListener('change', toggleDelay);
+    toggleDelay();
+</script>
+<script src="/static/js/notifications.js"></script>
+{% endblock %}ss

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,56 +10,61 @@
             background: #0a0a0a;
             display: flex; 
             justify-content: center; 
-            padding-top: 20px;
+            padding: 20px 40px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
         }
         .phone-frame {
-            width: 400px;
-            max-height: 95vh;
+            width: 100%;
+            max-width: 780px;
             background: #121212;
             border: 1px solid #2a2a2a;
-            border-radius: 4px;
+            border-radius: 8px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             scrollbar-width: none;
             -ms-overflow-style: none;
         }
-        .phone-frame::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
+        .phone-frame::-webkit-scrollbar { width: 0px; background: transparent; }
         
         .top-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 14px 16px;
+            padding: 16px 24px;
             border-bottom: 1px solid #2a2a2a;
             flex-shrink: 0;
         }
         .top-nav .account-name {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
             color: #f5f5f5;
         }
         .top-nav-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
         }
-        .top-nav-actions .add-post-link {
+        .top-nav-actions .plus-btn {
             background: #0095f6;
-            color: white !important;
-            padding: 6px 16px;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 13px;
-            text-decoration: none;
+            color: white;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            font-size: 24px;
+            font-weight: 300;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: 0.2s;
+            text-decoration: none;
+            line-height: 1;
         }
-        .top-nav-actions .add-post-link:hover {
+        .top-nav-actions .plus-btn:hover {
             background: #0077c2;
+            transform: scale(1.05);
         }
         .top-nav-actions .logout-link {
             color: #0095f6;
@@ -66,36 +72,34 @@
             font-size: 14px;
             text-decoration: none;
         }
-        .top-nav-actions .logout-link:hover {
-            text-decoration: underline;
-        }
+        .top-nav-actions .logout-link:hover { text-decoration: underline; }
 
-        .profile-header {
-            padding: 20px 16px 10px 16px;
-        }
+        .profile-header { padding: 24px; }
         .profile-row {
             display: flex;
             align-items: center;
-            gap: 25px;
+            gap: 30px;
         }
         .profile-pic {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             object-fit: cover;
             border: 2px solid #2a2a2a;
             background: #2a2a2a;
+            flex-shrink: 0;
         }
         .profile-pic-placeholder {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             background: #2a2a2a;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 35px;
+            font-size: 42px;
             color: #666;
+            flex-shrink: 0;
         }
         .profile-stats {
             display: flex;
@@ -103,66 +107,25 @@
             justify-content: space-around;
             text-align: center;
         }
-        .profile-stats .stat {
-            color: #f5f5f5;
-        }
-        .profile-stats .stat strong {
-            display: block;
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .profile-stats .stat span {
-            font-size: 13px;
-            color: #a8a8a8;
-        }
+        .profile-stats .stat { color: #f5f5f5; }
+        .profile-stats .stat strong { display: block; font-size: 22px; font-weight: 700; }
+        .profile-stats .stat span { font-size: 14px; color: #a8a8a8; }
 
-        .profile-info {
-            margin-top: 12px;
-        }
-        .profile-info .display-name {
-            font-size: 18px;
-            font-weight: 600;
-            color: #f5f5f5;
-        }
-        .profile-info .category {
-            color: #0095f6;
-            font-size: 14px;
-            font-weight: 600;
-            margin: 4px 0;
-        }
-        .profile-info .bio {
-            color: #e0e0e0;
-            font-size: 14px;
-            line-height: 1.5;
-            margin: 4px 0;
-        }
-        .profile-info .address {
-            color: #a8a8a8;
-            font-size: 13px;
-            margin: 2px 0;
-        }
-        .profile-info .phone {
-            color: #a8a8a8;
-            font-size: 13px;
-            margin: 2px 0;
-        }
-        .profile-info .email {
-            color: #a8a8a8;
-            font-size: 13px;
-            margin: 2px 0;
-        }
+        .profile-info { margin-top: 16px; }
+        .profile-info .display-name { font-size: 20px; font-weight: 700; color: #f5f5f5; }
+        .profile-info .category { color: #0095f6; font-size: 14px; font-weight: 600; margin: 4px 0; }
+        .profile-info .bio { color: #e0e0e0; font-size: 14px; line-height: 1.5; margin: 4px 0; }
+        .profile-info .address { color: #a8a8a8; font-size: 13px; margin: 2px 0; }
+        .profile-info .phone { color: #a8a8a8; font-size: 13px; margin: 2px 0; }
+        .profile-info .email { color: #a8a8a8; font-size: 13px; margin: 2px 0; }
 
-        .action-buttons {
-            display: flex;
-            gap: 8px;
-            margin: 8px 0 12px 0;
-        }
+        .action-buttons { display: flex; gap: 10px; margin: 14px 0 4px 0; }
         .btn-edit-profile {
             background: #2a2a2a;
             color: #f5f5f5;
             border: none;
-            padding: 6px 25px;
-            border-radius: 4px;
+            padding: 8px 25px;
+            border-radius: 6px;
             font-weight: 600;
             font-size: 14px;
             flex: 1;
@@ -172,8 +135,8 @@
             background: transparent;
             border: 1px solid #2a2a2a;
             color: #f5f5f5;
-            padding: 6px 20px;
-            border-radius: 4px;
+            padding: 8px 20px;
+            border-radius: 6px;
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
@@ -181,135 +144,140 @@
         }
         .btn-share-profile:hover { background: #1a1a1a; }
 
-        .divider {
-            height: 1px;
-            background: #2a2a2a;
-            margin: 8px 0;
-        }
+        .divider { height: 1px; background: #2a2a2a; margin: 8px 0; }
 
-        .profile-tabs {
-            display: flex;
-            justify-content: space-around;
-            padding: 0 16px;
+        .orders-section {
+            padding: 16px 24px;
+            background: #121212;
             border-top: 1px solid #2a2a2a;
             border-bottom: 1px solid #2a2a2a;
-            background: #121212;
-            flex-shrink: 0;
         }
-        .profile-tabs .tab {
-            padding: 12px 0 10px 0;
-            flex: 1;
-            text-align: center;
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
+        .orders-section .section-title {
+            color: #8e8e8e;
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .profile-tabs .tab svg {
-            width: 22px;
-            height: 22px;
-            fill: none;
-            stroke: #8e8e8e;
-            stroke-width: 1.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+        .orders-section .section-title a {
+            color: #0095f6;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 400;
+            text-transform: none;
         }
-        .profile-tabs .tab.active {
-            border-bottom-color: #f5f5f5;
-        }
-        .profile-tabs .tab.active svg {
-            stroke: #f5f5f5;
-        }
+        .orders-section .section-title a:hover { text-decoration: underline; }
+        .orders-section .order-count { color: #f5f5f5; font-weight: 700; font-size: 20px; }
 
-        .tab-content {
-            flex: 1;
-            overflow-y: auto;
-            background: #0a0a0a;
-            min-height: 200px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+        .posts-section { padding: 16px 24px; background: #121212; flex: 1; }
+        .posts-section .section-title {
+            color: #8e8e8e;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .tab-content::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
-        .tab-panel {
-            display: none;
-            min-height: 200px;
-        }
-        .tab-panel.active {
-            display: block;
+        .posts-section .section-title span {
+            font-size: 12px;
+            color: #555;
+            font-weight: 400;
+            text-transform: none;
         }
 
         .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            padding: 2px;
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            gap: 10px !important;
+        }
+        .product-link {
+            text-decoration: none !important;
+            color: inherit !important;
+            display: block !important;
+            width: 100% !important;
         }
         .product-card {
-            background: #1a1a1a;
-            text-align: center;
-            padding: 8px 4px;
-            border: 1px solid #2a2a2a;
-            border-radius: 2px;
-            cursor: pointer;
-            transition: 0.2s;
+            background: #1a1a1a !important;
+            text-align: center !important;
+            padding: 10px 8px !important;
+            border: 1px solid #2a2a2a !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            transition: 0.2s !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            min-height: 220px !important;
+            width: 100% !important;
         }
-        .product-card:hover { opacity: 0.7; }
+        .product-card:hover { opacity: 0.85 !important; background: #252525 !important; }
         .product-card img {
-            width: 100%;
-            height: 130px;
-            object-fit: cover;
-            border-radius: 2px;
-            background: #2a2a2a;
+            width: 100% !important;
+            height: 150px !important;
+            object-fit: cover !important;
+            border-radius: 4px !important;
+            background: #2a2a2a !important;
         }
         .product-card .no-img {
-            height: 130px;
-            background: #2a2a2a;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #666;
-            font-size: 14px;
+            width: 100% !important;
+            height: 150px !important;
+            background: #2a2a2a !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            color: #666 !important;
+            font-size: 14px !important;
+            border-radius: 4px !important;
         }
-        .product-card h3 {
-            font-size: 11px;
-            margin: 6px 0 3px 0;
-            color: #e0e0e0;
-            font-weight: 500;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .product-card .product-name {
+            font-size: 12px !important;
+            margin: 8px 0 4px 0 !important;
+            color: #e0e0e0 !important;
+            font-weight: 500 !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            display: -webkit-box !important;
+            -webkit-line-clamp: 2 !important;
+            -webkit-box-orient: vertical !important;
+            width: 100% !important;
+            min-height: 32px !important;
         }
-        .product-card .price {
-            font-weight: 700;
-            color: #f5f5f5;
-            font-size: 12px;
+        .product-card .price-row {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            justify-content: center !important;
+            align-items: center !important;
+            gap: 4px !important;
+            width: 100% !important;
         }
-
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 250px;
-            text-align: center;
-            padding: 40px 20px;
+        .product-card .product-price { font-weight: 700 !important; color: #f5f5f5 !important; font-size: 13px !important; }
+        .product-card .original-price { text-decoration: line-through !important; color: #777 !important; font-size: 10px !important; }
+        .product-card .discount { color: #ed4956 !important; font-size: 10px !important; font-weight: 600 !important; }
+        .product-card .seller-label {
+            color: #8e8e8e !important;
+            font-size: 10px !important;
+            margin-top: 6px !important;
+            background: #2a2a2a !important;
+            padding: 2px 8px !important;
+            border-radius: 4px !important;
+            display: inline-block !important;
         }
-        .empty-state .empty-title {
-            color: #f5f5f5;
-            font-size: 28px;
-            font-weight: 300;
-            margin-bottom: 8px;
-        }
-        .empty-state .empty-subtitle {
+        .no-products {
+            grid-column: 1 / -1;
             color: #8e8e8e;
             font-size: 14px;
-            max-width: 280px;
-            line-height: 1.6;
+            text-align: center;
+            padding: 30px;
         }
 
         .customers-section {
-            padding: 12px 16px;
+            padding: 16px 24px;
             background: #121212;
             border-top: 1px solid #2a2a2a;
         }
@@ -317,94 +285,68 @@
             color: #8e8e8e;
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             text-transform: uppercase;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .customers-section .section-title .count {
-            font-size: 12px;
-            color: #555;
-            font-weight: 400;
-            text-transform: none;
-        }
         .customer-card {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 10px 14px;
+            padding: 12px 16px;
             background: #1a1a1a;
             border: 1px solid #2a2a2a;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             transition: 0.2s;
-            margin-bottom: 6px;
+            text-decoration: none;
+            margin-bottom: 8px;
         }
-        .customer-card:hover {
-            background: #252525;
-            border-color: #3a3a3a;
-        }
+        .customer-card:hover { background: #252525; border-color: #3a3a3a; }
         .customer-card .customer-pic {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             object-fit: cover;
             background: #2a2a2a;
         }
         .customer-card .customer-pic-placeholder {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: #2a2a2a;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            font-size: 18px;
             color: #666;
         }
-        .customer-card .customer-info {
-            flex: 1;
-        }
-        .customer-card .customer-info .customer-name {
-            color: #f5f5f5;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .customer-card .customer-info .customer-desc {
-            color: #8e8e8e;
-            font-size: 12px;
-        }
+        .customer-card .customer-info { flex: 1; }
+        .customer-card .customer-info .customer-name { color: #f5f5f5; font-weight: 600; font-size: 15px; }
+        .customer-card .customer-info .customer-desc { color: #8e8e8e; font-size: 13px; }
         .customer-card .customer-badge {
             background: #2a2a2a;
             color: #8e8e8e;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: 600;
-            padding: 2px 10px;
+            padding: 3px 12px;
             border-radius: 10px;
         }
-        .customer-card .customer-arrow {
-            color: #8e8e8e;
-            font-size: 16px;
-        }
-        .no-customers {
-            color: #8e8e8e;
-            font-size: 14px;
-            text-align: center;
-            padding: 16px;
-        }
+        .customer-card .customer-arrow { color: #8e8e8e; font-size: 18px; }
+        .no-customers { color: #8e8e8e; font-size: 14px; text-align: center; padding: 20px; }
 
-        /* BOTTOM NAVIGATION - SVG ICONS */
         .bottom-nav {
             display: flex !important;
             justify-content: space-around !important;
             align-items: center !important;
-            padding: 10px 16px 14px !important;
+            padding: 12px 24px 16px !important;
             border-top: 1px solid #2a2a2a !important;
             background: #121212 !important;
             flex-shrink: 0 !important;
             width: 100% !important;
-            min-height: 60px !important;
+            min-height: 65px !important;
         }
         .bottom-nav .nav-item {
             color: #8e8e8e;
@@ -414,20 +356,20 @@
             display: flex !important;
             flex-direction: column !important;
             align-items: center !important;
-            gap: 2px !important;
+            gap: 3px !important;
             background: none !important;
             border: none !important;
             cursor: pointer !important;
             font-family: inherit !important;
             position: relative !important;
-            padding: 4px 8px !important;
+            padding: 4px 10px !important;
+            transition: 0.2s !important;
         }
         .bottom-nav .nav-item:hover { color: #f5f5f5 !important; }
         .bottom-nav .nav-item.active { color: #f5f5f5 !important; }
-
         .bottom-nav .nav-item svg {
-            width: 28px !important;
-            height: 28px !important;
+            width: 26px !important;
+            height: 26px !important;
             fill: none !important;
             stroke: currentColor !important;
             stroke-width: 2 !important;
@@ -435,17 +377,15 @@
             stroke-linejoin: round !important;
             display: block !important;
         }
-        .bottom-nav .nav-item .label {
-            font-size: 10px !important;
-            color: #8e8e8e !important;
-        }
-        .bottom-nav .nav-item.active .label {
-            color: #f5f5f5 !important;
-        }
+        .bottom-nav .nav-item .label { font-size: 11px !important; color: #8e8e8e !important; }
+        .bottom-nav .nav-item.active .label { color: #f5f5f5 !important; }
+        .bottom-nav .nav-item.switch-item { color: #0095f6 !important; }
+        .bottom-nav .nav-item.switch-item .label { color: #0095f6 !important; }
+        .bottom-nav .nav-item.switch-item:hover { color: #1aa1ff !important; }
         .nav-item .badge {
             position: absolute !important;
             top: 0 !important;
-            right: 2px !important;
+            right: 4px !important;
             width: 8px !important;
             height: 8px !important;
             background: #ed4956 !important;
@@ -453,54 +393,166 @@
             border: 2px solid #121212 !important;
         }
 
-        /* FLOATING ACTION BUTTON - Instagram Style */
-        .fab {
+                /* ============================================ */
+        /* NOTIFICATION POPUP — LARGER & HIGHLIGHTED     */
+        /* ============================================ */
+        .notification-popup {
             position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 56px;
-            height: 56px;
-            background: linear-gradient(135deg, #0095f6, #0077c2);
+            top: 24px;
+            right: 24px;
+            z-index: 999999;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 480px;
+            width: calc(100% - 48px);
+            pointer-events: none;
+        }
+
+        .notif-item {
+            background: linear-gradient(135deg, #1a2332 0%, #0f1720 100%);
+            border: 2px solid #3b82f6;
+            border-left: 6px solid #3b82f6;
+            border-radius: 14px;
+            padding: 22px 24px;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 0 1px rgba(96,165,250,0.15), 0 0 32px rgba(59,130,246,0.35);
+            animation: slideInRight 0.5s ease, notifPulse 2.5s ease-in-out infinite;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .notif-item::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 5px; height: 100%;
+            background: linear-gradient(180deg, #60a5fa, #3b82f6);
+            animation: notifGlow 1.5s ease-in-out infinite;
+        }
+        @keyframes notifPulse {
+            0%, 100% { box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 0 0 rgba(96,165,250,0.5), 0 0 32px rgba(59,130,246,0.35); }
+            50% { box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 0 12px rgba(96,165,250,0), 0 0 32px rgba(59,130,246,0.35); }
+        }
+        @keyframes notifGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Success — Released */
+        .notif-item.released {
+            border-color: #10b981;
+            border-left-color: #10b981;
+            background: linear-gradient(135deg, #0a2a1a 0%, #061410 100%);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 32px rgba(16,185,129,0.4);
+        }
+        .notif-item.released::before { background: linear-gradient(180deg, #34d399, #10b981); }
+
+        /* Order placed */
+        .notif-item.order {
+            border-color: #3b82f6;
+            border-left-color: #3b82f6;
+            background: linear-gradient(135deg, #0a1a2a 0%, #06121c 100%);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 32px rgba(59,130,246,0.4);
+        }
+        .notif-item.order::before { background: linear-gradient(180deg, #60a5fa, #3b82f6); }
+
+        /* Delay */
+        .notif-item.delay {
+            border-color: #f59e0b;
+            border-left-color: #f59e0b;
+            background: linear-gradient(135deg, #2a1f0a 0%, #1a1208 100%);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 32px rgba(245,158,11,0.4);
+        }
+        .notif-item.delay::before { background: linear-gradient(180deg, #fbbf24, #f59e0b); }
+
+        /* Refund / Dispute */
+        .notif-item.refund, .notif-item.dispute {
+            border-color: #dc2626;
+            border-left-color: #dc2626;
+            background: linear-gradient(135deg, #2a0a0a 0%, #1a0606 100%);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.85), 0 0 32px rgba(220,38,38,0.4);
+        }
+        .notif-item.refund::before, .notif-item.dispute::before {
+            background: linear-gradient(180deg, #ef4444, #dc2626);
+        }
+
+        .notif-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 12px;
+        }
+        .notif-title {
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: 0.3px;
+            line-height: 1.3;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            flex: 1;
+        }
+        .notif-title.released { color: #34d399; }
+        .notif-title.refunded { color: #f87171; }
+        .notif-title.ordered { color: #60a5fa; }
+        .notif-title.delayed { color: #fbbf24; }
+        .notif-title.disputed { color: #f87171; }
+
+        .notif-close {
+            color: #8e8e8e;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 0;
+            font-weight: 700;
+            transition: 0.2s;
+            background: rgba(255,255,255,0.08);
             border-radius: 50%;
+            width: 28px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 16px rgba(0, 149, 246, 0.4);
-            color: white;
-            text-decoration: none;
-            transition: 0.3s;
-            z-index: 100;
-            border: none;
-            cursor: pointer;
+            flex-shrink: 0;
+            line-height: 1;
         }
-        .fab:hover {
-            transform: scale(1.05);
-            box-shadow: 0 6px 24px rgba(0, 149, 246, 0.5);
-        }
-        .fab svg {
-            width: 28px;
-            height: 28px;
-            fill: none;
-            stroke: white;
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+        .notif-close:hover {
+            color: #ffffff;
+            background: rgba(255,255,255,0.2);
         }
 
-        @media (max-width: 420px) {
-            .phone-frame {
-                width: 100%;
-                max-height: 100vh;
-                border-radius: 0;
-                border: none;
-            }
-            body { padding-top: 0; }
-            .fab {
-                bottom: 75px;
-                right: 16px;
-                width: 50px;
-                height: 50px;
-            }
+        .notif-message {
+            color: #f0f0f0;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .notif-time {
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notif-time::before {
+            content: '🕐';
+            font-size: 13px;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(400px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 0; }
+            .phone-frame { max-width: 100%; border-radius: 0; border: none; }
+            .product-grid { grid-template-columns: repeat(2, 1fr) !important; }
+            .product-card img { height: 130px !important; }
+            .notification-popup { top: 10px; right: 10px; left: 10px; width: auto; }
         }
     </style>
 </head>
@@ -511,7 +563,7 @@
         <div class="top-nav">
             <span class="account-name">{{ user.username }}</span>
             <div class="top-nav-actions">
-                <a href="{% url 'add_product' %}" class="add-post-link">+ Add Post</a>
+                <a href="{% url 'add_product' %}" class="plus-btn" title="Add Post">+</a>
                 <a href="{% url 'logout' %}" class="logout-link">Logout</a>
             </div>
         </div>
@@ -565,75 +617,50 @@
             </div>
         </div>
 
-        <!-- PROFILE TABS -->
-        <div class="profile-tabs">
-            <div class="tab active" onclick="switchTab('posts')">
-                <svg viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="7" height="7" rx="1"/>
-                    <rect x="14" y="3" width="7" height="7" rx="1"/>
-                    <rect x="3" y="14" width="7" height="7" rx="1"/>
-                    <rect x="14" y="14" width="7" height="7" rx="1"/>
-                </svg>
+        <!-- ORDERS SECTION -->
+        <div class="orders-section">
+            <div class="section-title">
+                📦 Orders
+                <a href="{% url 'seller_orders' %}">View All →</a>
             </div>
-            <div class="tab" onclick="switchTab('reposts')">
-                <svg viewBox="0 0 24 24">
-                    <polyline points="17,4 20,7 17,10"/>
-                    <path d="M20 7 L4 7 C4 4 5 3 8 3"/>
-                    <polyline points="7,20 4,17 7,14"/>
-                    <path d="M4 17 L20 17 C20 20 19 21 16 21"/>
-                </svg>
-            </div>
-            <div class="tab" onclick="switchTab('tagged')">
-                <svg viewBox="0 0 24 24">
-                    <rect x="3" y="3" width="18" height="18" rx="2"/>
-                    <circle cx="12" cy="10" r="4"/>
-                    <path d="M6 20 L6 17 C6 14.5 8.5 13 12 13 C15.5 13 18 14.5 18 17 L18 20"/>
-                </svg>
+            <div style="display: flex; align-items: center; gap: 12px; margin-top: 6px;">
+                <span class="order-count">{{ orders_count }}</span>
+                <span style="color: #8e8e8e; font-size: 13px;">order{{ orders_count|pluralize }} received</span>
             </div>
         </div>
 
-        <!-- TAB CONTENT -->
-        <div class="tab-content" id="tabContent">
-            
-            <div class="tab-panel active" id="panel-posts">
+        <!-- PRODUCT GRID -->
+        <div class="posts-section">
+            <div class="section-title">
+                📷 Your Posts
+                <span>{{ products|length }} items</span>
+            </div>
+            <div class="product-grid">
                 {% if products %}
-                <div class="product-grid">
                     {% for product in products %}
-                    <a href="{% url 'product_detail' product.id %}" style="text-decoration: none; color: inherit; display: block;">
+                    <a href="{% url 'product_detail' product.id %}" class="product-link">
                         <div class="product-card">
                             {% if product.image %}
                                 <img src="{{ product.image.url }}" alt="{{ product.name }}">
                             {% else %}
                                 <div class="no-img">📷 No Image</div>
                             {% endif %}
-                            <h3>{{ product.name }}</h3>
-                            <div class="price">₹{{ product.price }}</div>
+                            <div class="product-name">{{ product.name }}</div>
+                            <div class="price-row">
+                                <span class="product-price">₹{{ product.price }}</span>
+                                {% if product.original_price %}
+                                    <span class="original-price">₹{{ product.original_price }}</span>
+                                    <span class="discount">{{ product.discount_percent }}% off</span>
+                                {% endif %}
+                            </div>
+                            <span class="seller-label">📦 Your Product</span>
                         </div>
                     </a>
                     {% endfor %}
-                </div>
                 {% else %}
-                <div class="empty-state">
-                    <div class="empty-title">No Posts Yet</div>
-                    <div class="empty-subtitle">Tap the <strong>+ Add Post</strong> button above to upload your first product!</div>
-                </div>
+                    <div class="no-products">No products available yet. Tap the <strong>+</strong> button to add your first product!</div>
                 {% endif %}
             </div>
-
-            <div class="tab-panel" id="panel-reposts">
-                <div class="empty-state">
-                    <div class="empty-title">No reposts</div>
-                    <div class="empty-subtitle">There are no reposts to show.</div>
-                </div>
-            </div>
-
-            <div class="tab-panel" id="panel-tagged">
-                <div class="empty-state">
-                    <div class="empty-title">No Posts Yet</div>
-                    <div class="empty-subtitle">When you are tagged in photos, they will appear here.</div>
-                </div>
-            </div>
-
         </div>
 
         <!-- CUSTOMERS SECTION -->
@@ -645,7 +672,7 @@
             
             {% if customers %}
                 {% for customer in customers %}
-                <div class="customer-card" onclick="showCustomer('{{ customer.username|escapejs }}', '{{ customer.bio|default:"No bio yet"|escapejs }}')">
+                <a href="{% url 'seller_view_buyer_dashboard' customer.id %}" class="customer-card">
                     {% if customer.profile_picture %}
                         <img src="{{ customer.profile_picture.url }}" alt="{{ customer.username }}" class="customer-pic">
                     {% else %}
@@ -655,7 +682,7 @@
                         <div class="customer-name">{{ customer.username }}</div>
                         <div class="customer-desc">
                             {% if customer.bio %}
-                                {{ customer.bio|truncatechars:30 }}
+                                {{ customer.bio|truncatechars:40 }}
                             {% else %}
                                 No bio yet
                             {% endif %}
@@ -663,14 +690,14 @@
                     </div>
                     <span class="customer-badge">Buyer</span>
                     <span class="customer-arrow">›</span>
-                </div>
+                </a>
                 {% endfor %}
             {% else %}
                 <div class="no-customers">No buyers registered yet.</div>
             {% endif %}
         </div>
 
-        <!-- BOTTOM NAVIGATION -->
+        <!-- BOTTOM NAV -->
         <div class="bottom-nav">
             <a href="#" class="nav-item active">
                 <svg viewBox="0 0 24 24">
@@ -678,7 +705,6 @@
                 </svg>
                 <span class="label">Home</span>
             </a>
-
             <a href="#" class="nav-item" onclick="showToast('🔍 Search coming soon!')">
                 <svg viewBox="0 0 24 24">
                     <circle cx="11" cy="11" r="8"/>
@@ -686,15 +712,15 @@
                 </svg>
                 <span class="label">Search</span>
             </a>
-
-            <a href="#" class="nav-item" onclick="showToast('🎬 Reels coming soon!')">
+            <a href="{% url 'switch_account' %}" class="nav-item switch-item" title="Switch Account">
                 <svg viewBox="0 0 24 24">
-                    <rect x="2" y="4" width="20" height="16" rx="4"/>
-                    <polygon points="10,8 16,12 10,16" fill="none" stroke="currentColor" stroke-width="2"/>
+                    <path d="M17 2l4 4-4 4"/>
+                    <path d="M3 11v-1a4 4 0 014-4h14"/>
+                    <path d="M7 22l-4-4 4-4"/>
+                    <path d="M21 13v1a4 4 0 01-4 4H3"/>
                 </svg>
-                <span class="label">Reels</span>
+                <span class="label">Switch</span>
             </a>
-
             <a href="#" class="nav-item" onclick="showToast('✏️ Create post coming soon!')">
                 <svg viewBox="0 0 24 24">
                     <path d="M12 5v14M5 12h14"/>
@@ -703,7 +729,6 @@
                 <span class="badge"></span>
                 <span class="label">Create</span>
             </a>
-
             <a href="#" class="nav-item" onclick="showToast('👤 Profile')">
                 <svg viewBox="0 0 24 24">
                     <circle cx="12" cy="12" r="10"/>
@@ -717,123 +742,114 @@
 
     </div>
 
-    <!-- FLOATING ACTION BUTTON (Instagram Style) -->
-    <a href="{% url 'add_product' %}" class="fab" title="Add Product">
-        <svg viewBox="0 0 24 24">
-            <path d="M12 5v14M5 12h14"/>
-            <circle cx="12" cy="12" r="10"/>
-        </svg>
-    </a>
+    <div id="notification-popup" class="notification-popup"></div>
 
     <script>
-        // ============================================ //
-        // SHARE PROFILE                               //
-        // ============================================ //
         function shareProfile() {
             if (navigator.share) {
-                navigator.share({
-                    title: '{{ user.username }} on Instagram Clone',
-                    url: window.location.href
-                });
+                navigator.share({ title: '{{ user.username }} on Instagram Clone', url: window.location.href });
             } else {
-                navigator.clipboard.writeText(window.location.href).then(() => {
-                    showToast('📋 Profile URL copied!');
-                });
+                navigator.clipboard.writeText(window.location.href).then(() => showToast('📋 Profile URL copied!'));
             }
         }
 
-        // ============================================ //
-        // SHOW CUSTOMER                               //
-        // ============================================ //
-        function showCustomer(username, bio) {
-            showToast('👤 Customer: ' + username + '\n📝 Bio: ' + bio);
-        }
-
-        // ============================================ //
-        // TOAST NOTIFICATION                          //
-        // ============================================ //
         function showToast(message) {
             const existing = document.getElementById('toast');
             if (existing) existing.remove();
-            
             const toast = document.createElement('div');
             toast.id = 'toast';
             toast.textContent = message;
             toast.style.cssText = `
-                position: fixed;
-                bottom: 80px;
-                left: 50%;
-                transform: translateX(-50%);
-                background: #1a1a1a;
-                color: #f5f5f5;
-                padding: 12px 24px;
-                border-radius: 8px;
-                border: 1px solid #2a2a2a;
-                font-size: 14px;
-                z-index: 99999;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.6);
-                animation: fadeInUp 0.3s ease;
-                max-width: 90%;
-                text-align: center;
-                white-space: pre-line;
+                position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+                background: #1a1a1a; color: #f5f5f5; padding: 12px 24px;
+                border-radius: 8px; border: 1px solid #2a2a2a; font-size: 14px;
+                z-index: 99999; box-shadow: 0 4px 12px rgba(0,0,0,0.6);
             `;
             document.body.appendChild(toast);
-            
             setTimeout(() => {
                 toast.style.opacity = '0';
                 toast.style.transition = 'opacity 0.3s';
                 setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            }, 2500);
         }
 
-        // ============================================ //
-        // TAB SWITCHING                                //
-        // ============================================ //
-        function switchTab(tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const panels = {
-                'posts': document.getElementById('panel-posts'),
-                'reposts': document.getElementById('panel-reposts'),
-                'tagged': document.getElementById('panel-tagged')
-            };
-            
-            tabs.forEach(t => t.classList.remove('active'));
-            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
-            
-            Object.keys(panels).forEach(key => {
-                panels[key].classList.remove('active');
-            });
-            if (panels[tabName]) {
-                panels[tabName].classList.add('active');
-            }
-        }
-
-        // ============================================ //
-        // BOTTOM NAV HIGHLIGHTING                      //
-        // ============================================ //
         document.querySelectorAll('.bottom-nav .nav-item').forEach(item => {
             item.addEventListener('click', function(e) {
-                if (!this.getAttribute('onclick')) {
-                    e.preventDefault();
-                }
+                if (this.classList.contains('switch-item')) return;
+                if (!this.getAttribute('onclick')) e.preventDefault();
                 document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
                 this.classList.add('active');
             });
         });
 
-        // ============================================ //
-        // CSS ANIMATIONS                              //
-        // ============================================ //
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeInUp {
-                from { opacity: 0; transform: translateX(-50%) translateY(20px); }
-                to { opacity: 1; transform: translateX(-50%) translateY(0); }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        }
 
+        async function checkNotifications() {
+            try {
+                const response = await fetch('/api/notifications/');
+                const data = await response.json();
+                
+                if (data.notifications && data.notifications.length > 0) {
+                    data.notifications.forEach((notif, index) => {
+                        setTimeout(() => {
+                            showNotificationPopup(notif);
+                        }, index * 800);
+                    });
+                    
+                    setTimeout(() => {
+                        fetch('/api/notifications/read/', {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': getCookie('csrftoken'),
+                                'Content-Type': 'application/json'
+                            }
+                        });
+                    }, data.notifications.length * 800 + 500);
+                }
+            } catch (error) {
+                console.error('Notification fetch failed:', error);
+            }
+        }
+
+        function showNotificationPopup(notif) {
+            const popup = document.createElement('div');
+            
+            let typeClass = '';
+            let titleClass = '';
+            
+            if (notif.type === 'FUND_RELEASED') { typeClass = 'released'; titleClass = 'released'; }
+            else if (notif.type === 'FUND_REFUNDED') { typeClass = 'refund'; titleClass = 'refunded'; }
+            else if (notif.type === 'ORDER_PLACED') { typeClass = 'order'; titleClass = 'ordered'; }
+            else if (notif.type === 'ORDER_DELAYED') { typeClass = 'delay'; titleClass = 'delayed'; }
+            else if (notif.type === 'ORDER_DISPUTED') { typeClass = 'dispute'; titleClass = 'disputed'; }
+            else if (notif.type === 'DISPUTE_RESOLVED') { typeClass = 'dispute'; titleClass = 'disputed'; }
+            
+            popup.className = `notif-item ${typeClass}`;
+            
+            popup.innerHTML = `
+                <div class="notif-header">
+                    <span class="notif-title ${titleClass}">${notif.title}</span>
+                    <span class="notif-close" onclick="this.parentElement.parentElement.remove()">✕</span>
+                </div>
+                <div class="notif-message">${notif.message}</div>
+                <div class="notif-time">${notif.created_at}</div>
+            `;
+            
+            document.getElementById('notification-popup').appendChild(popup);
+            
+            setTimeout(() => {
+                popup.style.opacity = '0';
+                popup.style.transform = 'translateX(400px)';
+                setTimeout(() => popup.remove(), 400);
+            }, 10000);
+        }
+
+        document.addEventListener('DOMContentLoaded', checkNotifications);
+    </script>
+<script src="/static/js/notifications.js"></script>
 </body>
 </html>

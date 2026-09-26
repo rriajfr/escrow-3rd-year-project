@@ -1,0 +1,120 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}Raise Dispute{% endblock %}
+
+{% block extra_css %}
+<style>
+    .keyword-check { display: none; }
+    .keyword-label {
+        padding: 10px 15px;
+        border: 2px solid #2a2a2a;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: block;
+        margin-bottom: 8px;
+        background: #1c1c1c;
+        color: #a8a8a8;
+        font-weight: 500;
+    }
+    .keyword-check:checked + .keyword-label {
+        border-color: #ed4956;
+        background-color: rgba(237, 73, 86, 0.15);
+        color: #ed4956;
+        font-weight: 600;
+    }
+    .keyword-label:hover {
+        border-color: #444;
+        color: #fff;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card" style="border: 1px solid #ed4956;">
+            <div class="card-header" style="background: rgba(237, 73, 86, 0.15);">
+                <h4 class="mb-0" style="color: #ed4956;">
+                    <i class="fas fa-exclamation-triangle"></i> Raise Dispute — Order #{{ order.id }}
+                </h4>
+            </div>
+            <div class="card-body p-4">
+                <p class="text-muted mb-4">Please provide detailed evidence. Our AI will analyze your claim instantly.</p>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <!-- Section 1: Keywords -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold h5">1. What is the issue? (Select all that apply)</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="checkbox" class="keyword-check" name="issue_keywords" value="Wrong Size" id="kw1">
+                                <label class="keyword-label" for="kw1">📏 Wrong Size</label>
+
+                                <input type="checkbox" class="keyword-check" name="issue_keywords" value="Wrong Color" id="kw2">
+                                <label class="keyword-label" for="kw2">🎨 Wrong Color</label>
+
+                                <input type="checkbox" class="keyword-check" name="issue_keywords" value="Damaged or Defective" id="kw3">
+                                <label class="keyword-label" for="kw3">💔 Damaged / Defective</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="checkbox" class="keyword-check" name="issue_keywords" value="Fake or Counterfeit" id="kw4">
+                                <label class="keyword-label" for="kw4">🚫 Fake / Counterfeit</label>
+
+                                <input type="checkbox" class="keyword-check" name="issue_keywords" value="Not as Described" id="kw5">
+                                <label class="keyword-label" for="kw5">📝 Not as Described</label>
+
+                                <input type="checkbox" class="keyword-check" name="issue_keywords" value="Missing Parts" id="kw6">
+                                <label class="keyword-label" for="kw6">📦 Missing Parts</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Section 2: Written Reason -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold h5">2. Describe the issue in detail</label>
+                        <textarea name="reason" class="form-control" rows="4" placeholder="Example: I ordered a Large but received a Small. The color is completely different from the photos." required></textarea>
+                        <small class="text-muted">Write a clear description to help our AI understand your issue better.</small>
+                    </div>
+
+                    <hr>
+
+                    <!-- Section 3: Evidence Uploads -->
+                    <div class="mb-4">
+                        <label class="form-label fw-bold h5">3. Upload Evidence</label>
+                        <small class="text-muted d-block mb-3">You MUST upload at least one photo for every issue you ticked above.</small>
+
+                        <div class="mb-3">
+                            <label class="form-label">Photo of Received Item (Required)</label>
+                            <input type="file" name="received_image" class="form-control" accept="image/*" required>
+                            <small class="text-muted">Take a clear photo of the item you received.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Photo of Size Tag (Required if "Wrong Size" is ticked)</label>
+                            <input type="file" name="tag_image" class="form-control" accept="image/*">
+                            <small class="text-muted">Our AI uses OCR to read the tag and verify size claims instantly.</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Additional Evidence (Optional, multiple allowed)</label>
+                            <input type="file" name="evidence_files" class="form-control" accept="image/*,video/*" multiple>
+                            <small class="text-muted">Upload multiple photos or a short video showing the issue. You can select multiple files at once.</small>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg fw-bold">Submit Dispute for AI Analysis</button>
+                        <a href="{% url 'order_tracking_detail' order.id %}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/static/js/notifications.js"></script>
+{% endblock %}

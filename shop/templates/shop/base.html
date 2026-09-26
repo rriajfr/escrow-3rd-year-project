@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EscrowGrm{% endblock %}</title>
+    {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{% static 'css/theme.css' %}" rel="stylesheet">
+    <style>
+        /* ============================================ */
+        /* NAVBAR (Instagram-style light)              */
+        /* ============================================ */
+        .shop-navbar {
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #DBDBDB;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .shop-navbar .navbar-brand {
+            font-family: 'Brush Script MT', cursive;
+            font-size: 28px;
+            color: #262626;
+            font-weight: 400;
+            text-decoration: none;
+        }
+        .shop-navbar .nav-link {
+            color: #262626;
+            font-weight: 500;
+            padding: 0 10px;
+            transition: 0.2s;
+        }
+        .shop-navbar .nav-link:hover { color: #8E8E8E; }
+
+        /* Notification bell */
+        .notification-bell { position: relative; }
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ED4956;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        /* ============================================ */
+        /* PROFILE DROPDOWN (Instagram-style)          */
+        /* ============================================ */
+        .profile-dropdown { position: relative; }
+        .profile-trigger {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.15s;
+        }
+        .profile-trigger:hover { transform: scale(1.05); }
+        .profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #DBDBDB;
+        }
+        .profile-initial {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0095F6, #1877F2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        .profile-dropdown .dropdown-menu {
+            background: #FFFFFF;
+            border: 1px solid #DBDBDB;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+            padding: 0;
+            overflow: hidden;
+            min-width: 280px;
+            margin-top: 8px;
+        }
+        .profile-dropdown .dropdown-item {
+            color: #262626;
+            padding: 10px 15px;
+            transition: background 0.15s;
+            border-radius: 0;
+        }
+        .profile-dropdown .dropdown-item:hover {
+            background: #F5F5F5;
+            color: #262626;
+        }
+        .switch-accounts-label {
+            color: #8E8E8E;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 11px;
+            padding: 12px 15px 6px;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="shop-theme">
+
+    <!-- ============================================ -->
+    <!-- DJANGO MESSAGES                              -->
+    <!-- ============================================ -->
+    {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert {% if message.tags == 'error' %}alert-danger{% elif message.tags == 'success' %}alert-success{% elif message.tags == 'warning' %}alert-warning{% else %}alert-info{% endif %}"
+                 style="border-radius: 12px; position: relative;">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                        style="position: absolute; top: 12px; right: 15px;"></button>
+            </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- ============================================ -->
+    <!-- SHOP NAVBAR                                  -->
+    <!-- ============================================ -->
+    <nav class="shop-navbar">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="{% url 'home' %}">EscrowGrm</a>
+
+            <div class="d-flex align-items-center gap-3">
+                {% if user.is_authenticated %}
+
+                    {# ----- Seller links ----- #}
+                    {% if user.role == 'seller' %}
+                        <a href="{% url 'seller_dashboard' %}" class="nav-link" title="Dashboard">
+                            <i class="fas fa-home"></i>
+                        </a>
+                        <a href="{% url 'seller_orders' %}" class="nav-link" title="Orders">
+                            <i class="fas fa-box"></i>
+                        </a>
+                        <a href="{% url 'add_product' %}" class="nav-link" title="Add Product">
+                            <i class="fas fa-plus-square"></i>
+                        </a>
+                    {% else %}
+                        {# ----- Buyer links ----- #}
+                        <a href="{% url 'buyer_dashboard' %}" class="nav-link" title="Dashboard">
+                            <i class="fas fa-home"></i>
+                        </a>
+                        <a href="{% url 'shop' %}" class="nav-link" title="Shop">
+                            <i class="fas fa-search"></i>
+                        </a>
+                        <a href="{% url 'buyer_tracking' %}" class="nav-link" title="My Orders">
+                            <i class="fas fa-box"></i>
+                        </a>
+                        <a href="{% url 'track_order' %}" class="nav-link" title="Track">
+                            <i class="fas fa-truck"></i>
+                        </a>
+                    {% endif %}
+
+                    <!-- Notification Bell -->
+                    <div class="notification-bell dropdown">
+                        <i class="fas fa-bell nav-link" data-bs-toggle="dropdown" style="cursor: pointer;"></i>
+                        <span class="notification-badge" id="notifCount" style="display:none;">0</span>
+                        <ul class="dropdown-menu dropdown-menu-end shop-dropdown" id="notifDropdown"
+                            style="min-width: 340px;">
+                            <li><h6 class="dropdown-header">Notifications</h6></li>
+                            <li id="notifEmpty" class="px-3 py-3" style="color:#8E8E8E;">No new notifications</li>
+                        </ul>
+                    </div>
+
+                    <!-- ============================================ -->
+                    <!-- PROFILE DROPDOWN — Instagram multi-account   -->
+                    <!-- ============================================ -->
+                    <div class="profile-dropdown dropdown">
+                        <div class="profile-trigger" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if user.profile_picture %}
+                                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="profile-pic">
+                            {% else %}
+                                <div class="profile-initial">{{ user.username|first|upper }}</div>
+                            {% endif %}
+                        </div>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <!-- Current account -->
+                            <li class="px-3 py-3" style="border-bottom: 1px solid #EFEFEF;">
+                                <div class="d-flex align-items-center gap-2">
+                                    {% if user.profile_picture %}
+                                        <img src="{{ user.profile_picture.url }}" class="profile-pic"
+                                             style="width: 40px; height: 40px;">
+                                    {% else %}
+                                        <div class="profile-initial" style="width: 40px; height: 40px; font-size: 16px;">
+                                            {{ user.username|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <div style="font-weight: 700; color: #262626;">{{ user.username }}</div>
+                                        <div style="font-size: 12px; color: #8E8E8E;">
+                                            {% if user.is_superuser or user.username == 'admin' %}
+                                                Administrator
+                                            {% elif user.role == 'seller' %}
+                                                Seller Account
+                                            {% else %}
+                                                Buyer Account
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- Switchable accounts -->
+                            {% if switchable_accounts %}
+                                <li>
+                                    <div class="switch-accounts-label">Switch Account</div>
+                                </li>
+                                {% for acc in switchable_accounts %}
+                                    <li>
+                                        <a class="dropdown-item d-flex align-items-center gap-2"
+                                           href="{% url 'switch_to_account' acc.id %}">
+                                            {% if acc.profile_picture %}
+                                                <img src="{{ acc.profile_picture.url }}" class="profile-pic"
+                                                     style="width: 36px; height: 36px;">
+                                            {% else %}
+                                                <div class="profile-initial"
+                                                     style="width: 36px; height: 36px; background: #DBDBDB; color: #262626; font-size: 14px;">
+                                                    {{ acc.username|first|upper }}
+                                                </div>
+                                            {% endif %}
+                                            <div>
+                                                <div style="font-weight: 600; color: #262626;">{{ acc.username }}</div>
+                                                <div style="font-size: 11px; color: #8E8E8E;">
+                                                    {% if acc.is_superuser or acc.username == 'admin' %}
+                                                        Admin
+                                                    {% elif acc.role == 'seller' %}
+                                                        Seller
+                                                    {% else %}
+                                                        Buyer
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                {% endfor %}
+                            {% endif %}
+
+                            <!-- Add Account -->
+                            <li style="border-top: 1px solid #EFEFEF;">
+                                <a class="dropdown-item" href="{% url 'login' %}">
+                                    <i class="fas fa-plus-circle me-2" style="color: #0095F6;"></i>
+                                    Add Account
+                                </a>
+                            </li>
+
+                            <!-- Logout -->
+                            <li style="border-top: 1px solid #EFEFEF;">
+                                {% if switchable_accounts %}
+                                    <a class="dropdown-item" href="{% url 'logout_current_only' %}"
+                                       style="color: #ED4956;">
+                                        <i class="fas fa-sign-out-alt me-2"></i>
+                                        Log Out ({{ user.username }})
+                                    </a>
+                                {% else %}
+                                    <a class="dropdown-item" href="{% url 'logout' %}" style="color: #ED4956;">
+                                        <i class="fas fa-sign-out-alt me-2"></i>
+                                        Log Out
+                                    </a>
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================ -->
+    <!-- PAGE CONTENT                                 -->
+    <!-- ============================================ -->
+    <div class="container py-4">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SCRIPTS                                      -->
+    <!-- ============================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    function loadNotifications() {
+        fetch('/api/notifications/')
+            .then(r => r.json())
+            .then(data => {
+                const count = document.getElementById('notifCount');
+                const dropdown = document.getElementById('notifDropdown');
+                const empty = document.getElementById('notifEmpty');
+                if (!count || !dropdown) return;
+
+                if (data.notifications.length > 0) {
+                    count.textContent = data.notifications.length;
+                    count.style.display = 'inline';
+                    if (empty) empty.style.display = 'none';
+                    dropdown.querySelectorAll('.notif-item').forEach(el => el.remove());
+
+                    data.notifications.forEach(n => {
+                        const li = document.createElement('li');
+                        li.className = 'notif-item';
+                        li.innerHTML = `
+                            <a href="${n.redirect_url}"
+                               style="display:block; padding:12px 15px; color:#262626; text-decoration:none; border-bottom:1px solid #EFEFEF;">
+                                <div style="font-weight:600; color:#262626;">${n.title}</div>
+                                <p style="color:#8E8E8E; font-size:13px; margin:4px 0 0;">
+                                    ${n.message.substring(0, 90)}${n.message.length > 90 ? '...' : ''}
+                                </p>
+                                <small style="color:#A8A8A8; font-size:11px;">${n.created_at}</small>
+                            </a>
+                        `;
+                        dropdown.appendChild(li);
+                    });
+                } else {
+                    count.style.display = 'none';
+                    if (empty) empty.style.display = 'block';
+                }
+            })
+            .catch(err => console.log('Notif error:', err));
+    }
+
+    if (document.getElementById('notifCount')) {
+        loadNotifications();
+        setInterval(loadNotifications, 15000);
+    }
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

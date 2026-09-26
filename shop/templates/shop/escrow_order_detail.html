@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escrow Order #{{ order.id }} - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card-header { border-radius: 12px 12px 0 0 !important; font-weight: 600; }
+        .status-badge { padding: 8px 16px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+        .info-label { color: #6c757d; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+        .info-value { font-weight: 600; color: #212529; margin-bottom: 15px; }
+        .action-btn { padding: 12px 20px; font-weight: 600; font-size: 16px; border-radius: 8px; }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">🏦 Escrow Management: Order #{{ order.id }}</h2>
+        <a href="{% url 'escrow_dashboard' %}" class="btn btn-outline-secondary">← Back to Escrow Dashboard</a>
+    </div>
+
+    <!-- Order Context Row -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-white">
+                <div class="card-body d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                        <h5 class="mb-1">{{ order.product_name }}</h5>
+                        <p class="text-muted mb-0">Tracking: <strong>{{ order.tracking_number }}</strong> | Total Amount: <strong>₹{{ order.total_amount }}</strong></p>
+                    </div>
+                    <div class="text-end mt-2 mt-md-0">
+                        <span class="badge bg-secondary">Order Status: {{ order.status }}</span>
+                        <span class="badge {% if order.fund_status == 'HELD' %}bg-warning text-dark{% elif order.fund_status == 'RETURN_PENDING' %}bg-danger{% elif order.fund_status == 'RELEASED' %}bg-success{% else %}bg-dark{% endif %}">
+                            Funds: {{ order.fund_status }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- LEFT COLUMN: ORDER & PEOPLE DETAILS -->
+        <div class="col-lg-5">
+            <!-- Order Info -->
+            <div class="card">
+                <div class="card-header bg-dark text-white">📦 Order Details</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="info-label">Order Placed</p>
+                            <p class="info-value">{{ order.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="info-label">Delivered At</p>
+                            <p class="info-value">{{ order.delivered_at|date:"M d, Y H:i"|default:"Not Delivered" }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="info-label">Quantity</p>
+                            <p class="info-value">{{ order.quantity }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="info-label">Size</p>
+                            <p class="info-value">{{ order.size|default:"N/A" }}</p>
+                        </div>
+                        <div class="col-12">
+                            <p class="info-label">Shipping Address</p>
+                            <p class="info-value">{{ order.full_name }}<br>{{ order.address }}, {{ order.city }} - {{ order.pincode }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buyer & Seller Info -->
+            <div class="card">
+                <div class="card-header bg-primary text-white">👥 Parties Involved</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
+                            <p class="info-label">Buyer</p>
+                            <p class="info-value">{{ order.buyer.username }}<br><small class="text-muted">{{ order.buyer.email }}</small></p>
+                        </div>
+                        <div class="col-6">
+                            <p class="info-label">Seller</p>
+                            <p class="info-value">{{ order.seller.username }}<br><small class="text-muted">{{ order.seller.email }}</small></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT COLUMN: ESCROW & ACTIONS -->
+        <div class="col-lg-7">
+            
+            <!-- Escrow Status -->
+            <div class="card">
+                <div class="card-header bg-success text-white">💰 Escrow Financial Status</div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-4 text-center border-end">
+                            <p class="info-label">Held Amount</p>
+                            <h4 class="text-success">₹{{ order.total_amount }}</h4>
+                        </div>
+                        <div class="col-4 text-center border-end">
+                            <p class="info-label">Current Status</p>
+                            <span class="badge {% if order.fund_status == 'HELD' %}bg-warning text-dark{% elif order.fund_status == 'RETURN_PENDING' %}bg-danger{% elif order.fund_status == 'RELEASED' %}bg-success{% else %}bg-dark{% endif %} status-badge">
+                                {{ order.fund_status }}
+                            </span>
+                        </div>
+                        <div class="col-4 text-center">
+                            <p class="info-label">Escrow Date</p>
+                            <p class="info-value mb-0">{{ order.payment_held_at|date:"M d, Y" }}</p>
+                        </div>
+                    </div>
+                    
+                    {% if order.escrow_notes %}
+                    <div class="alert alert-light border mt-3 mb-0">
+                        <strong>Escrow Notes:</strong> {{ order.escrow_notes }}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- RETURN TRACKING BANNER -->
+            {% if order.fund_status == 'RETURN_PENDING' %}
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">📦 Return Pending — Buyer Shipped Item Back</div>
+                <div class="card-body">
+                    <p>The buyer has shipped the disputed item back to the seller. The seller must confirm receipt before funds are released to the buyer.</p>
+                    <div class="row bg-light p-3 rounded border mb-3">
+                        <div class="col-6">
+                            <p class="info-label">Return Carrier</p>
+                            <p class="info-value mb-0">{{ order.return_carrier|default:"Not Provided" }}</p>
+                        </div>
+                        <div class="col-6">
+                            <p class="info-label">Return Tracking Number</p>
+                            <p class="info-value mb-0">{{ order.return_tracking_number|default:"Not Provided" }}</p>
+                        </div>
+                        <div class="col-12 mt-2">
+                            <p class="info-label">Return Shipped At</p>
+                            <p class="info-value mb-0">{{ order.return_shipped_at|date:"M d, Y H:i"|default:"Pending" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger mb-0">
+                        <h5 class="alert-heading">⚠️ Seller Unresponsive?</h5>
+                        <p class="mb-2">If the return tracking confirms delivery and the seller has not clicked "Confirm Return" within 48 hours, you can force the refund to the buyer.</p>
+                        <a href="{% url 'admin_force_refund' order.id %}" class="btn btn-danger fw-bold w-100" onclick="return confirm('Are you sure you want to FORCE REFUND ₹{{ order.total_amount }} to the buyer? Only do this if the seller is unresponsive.');">
+                            ⚡ Force Refund to Buyer
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- ADMIN ACTIONS (Standard Escrow) -->
+            {% if order.fund_status == 'HELD' %}
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">⚖️ Admin Manual Actions</div>
+                <div class="card-body">
+                    <p class="text-muted">These actions bypass the 24-hour timer and should only be used if an issue has been manually verified by the admin.</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <a href="{% url 'escrow_release' order.id %}" class="btn btn-success action-btn w-100" onclick="return confirm('Are you sure you want to RELEASE ₹{{ order.total_amount }} to the seller?');">
+                                💰 Release Funds to Seller
+                            </a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{% url 'escrow_refund' order.id %}" class="btn btn-danger action-btn w-100" onclick="return confirm('Are you sure you want to REFUND ₹{{ order.total_amount }} to the buyer?');">
+                                ↩️ Refund Buyer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- RESOLVED STATE -->
+            {% if order.fund_status == 'RELEASED' or order.fund_status == 'REFUNDED' %}
+            <div class="card border-success">
+                <div class="card-header bg-success text-white">✅ Escrow Resolved</div>
+                <div class="card-body text-center">
+                    <h4 class="mb-3">
+                        {% if order.fund_status == 'RELEASED' %}
+                            Funds Released to Seller
+                        {% else %}
+                            Funds Refunded to Buyer
+                        {% endif %}
+                    </h4>
+                    <p class="mb-0"><strong>Resolved At:</strong> {{ order.funds_released_at|date:"M d, Y H:i"|default:order.funds_refunded_at|date:"M d, Y H:i" }}</p>
+                    <p class="mb-0"><strong>Escrow Notes:</strong> {{ order.escrow_notes|default:"No notes provided." }}</p>
+                </div>
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

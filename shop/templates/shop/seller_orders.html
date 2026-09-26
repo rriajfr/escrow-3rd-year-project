@@ -1,0 +1,166 @@
+{% extends 'shop/base.html' %}
+{% load static %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">🛍️ My Orders</h2>
+    <a href="{% url 'seller_dashboard' %}" class="btn btn-outline-secondary">
+        <i class="fas fa-arrow-left"></i> Dashboard
+    </a>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card p-3 text-center">
+            <small class="text-muted">Pending</small>
+            <h3 class="mb-0" style="color: #0095f6;">{{ pending_count }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 text-center">
+            <small class="text-muted">Delivered</small>
+            <h3 class="mb-0" style="color: #2ecc71;">{{ delivered_count }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 text-center">
+            <small class="text-muted">Total Revenue</small>
+            <h3 class="mb-0" style="color: #f39c12;">₹{{ total_revenue }}</h3>
+        </div>
+    </div>
+</div>
+
+{% for order in orders %}
+<div class="card">
+    <div class="card-body p-4">
+
+        <div class="row align-items-center">
+            <div class="col-md-2 mb-3 mb-md-0">
+                {% if order.product.image %}
+                    <img src="{{ order.product.image.url }}" class="img-fluid rounded" 
+                         style="max-height: 90px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary rounded d-flex align-items-center justify-content-center" style="height: 90px;">
+                        <i class="fas fa-image fa-2x text-muted"></i>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-md-4 mb-3 mb-md-0">
+                <h5 class="mb-1">{{ order.product_name }}</h5>
+                <p class="text-muted small mb-0">Order #{{ order.id }} | {{ order.tracking_number }}</p>
+                <p class="text-muted small mb-0">Buyer: {{ order.full_name }} ({{ order.city }})</p>
+            </div>
+            <div class="col-md-2 text-center mb-3 mb-md-0">
+                <strong style="color: #0095f6; font-size: 18px;">₹{{ order.total_amount }}</strong>
+            </div>
+            <div class="col-md-2 text-center mb-3 mb-md-0">
+                <span class="badge {% if order.status == 'DELIVERED' %}bg-success{% elif order.status == 'SHIPPED' %}bg-info{% elif order.status == 'REFUNDED' %}bg-dark{% else %}bg-warning text-dark{% endif %} mb-1">
+                    {{ order.status }}
+                </span><br>
+                <span class="badge {% if order.fund_status == 'HELD' %}bg-secondary{% elif order.fund_status == 'RETURN_PENDING' %}bg-danger{% elif order.fund_status == 'RELEASED' %}bg-success{% else %}bg-dark{% endif %}">
+                    {{ order.fund_status }}
+                </span>
+            </div>
+            <div class="col-md-2 text-end">
+                {% if order.status == 'DELIVERED' or order.fund_status == 'RELEASED' or order.fund_status == 'REFUNDED' or order.fund_status == 'RETURN_PENDING' %}
+                    <button class="btn btn-sm btn-outline-secondary" disabled>
+                        <i class="fas fa-lock"></i> Locked
+                    </button>
+                {% else %}
+                    <a href="{% url 'update_tracking' order.id %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-edit"></i> Manage
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- ============================================ -->
+        <!-- RETURN PENDING BLOCK (READ-ONLY for seller)   -->
+        <!-- ============================================ -->
+        {% if order.fund_status == 'RETURN_PENDING' %}
+        <div class="alert mt-3 mb-0" style="background: rgba(237, 73, 86, 0.15); border: 1px solid #ed4956; border-radius: 12px;">
+            <h6 style="color: #ed4956;">
+                <i class="fas fa-box-open"></i> Return Pending — Buyer Shipped Item Back
+            </h6>
+
+            {% if order.return_tracking_number %}
+                
+                <!-- Tracking details -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="text-muted mb-1"><strong>Carrier:</strong> {{ order.return_carrier }}</p>
+                        <p class="text-muted mb-0"><strong>Tracking Number:</strong> {{ order.return_tracking_number }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        {% if order.return_shipped_at %}
+                            <p class="text-muted mb-1"><strong>Shipped on:</strong> {{ order.return_shipped_at|date:"M d, Y H:i" }}</p>
+                        {% endif %}
+                        {% if order.return_confirmation_deadline %}
+                            <p class="text-muted mb-0"><strong>Confirm by:</strong> {{ order.return_confirmation_deadline|date:"M d, Y H:i" }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Return Progress (READ-ONLY) -->
+                <div class="p-3 mb-3 rounded" style="background: rgba(0,0,0,0.15);">
+                    <strong class="d-block mb-2" style="color: #a8a8a8;">
+                        <i class="fas fa-eye"></i> Return Shipment Progress (updated by buyer):
+                    </strong>
+                    {% for step in order.return_tracking_steps %}
+                        <div class="d-flex align-items-center mb-2">
+                            {% if step.state == 'done' %}
+                                <i class="fas fa-check-circle me-2" style="color: #2ecc71;"></i>
+                            {% elif step.state == 'active' %}
+                                <i class="fas fa-circle-notch fa-spin me-2" style="color: #f39c12;"></i>
+                            {% else %}
+                                <i class="far fa-circle me-2" style="color: #666;"></i>
+                            {% endif %}
+                            <span class="{% if step.state == 'pending' %}text-muted{% endif %}">{{ step.label }}</span>
+                            {% if step.time %}
+                                <small class="text-muted ms-2">— {{ step.time|date:"M d, H:i" }}</small>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                {% if order.is_return_deadline_passed %}
+                    <p class="mb-2" style="color:#ed4956; font-weight:600;">
+                        ⏰ Deadline passed. Admin may force-refund the buyer at any time.
+                    </p>
+                {% elif order.hours_until_return_deadline %}
+                    <p class="mb-2" style="color:#f39c12; font-weight:600;">
+                        ⏰ You have <strong>{{ order.hours_until_return_deadline }} hours</strong> 
+                        to confirm receipt once the package arrives.
+                    </p>
+                {% endif %}
+
+                <!-- CONFIRM BUTTON (only action seller can take) -->
+                <form method="POST" action="{% url 'seller_confirm_return' order.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success fw-bold"
+                            onclick="return confirm('Confirm receipt of returned item? Buyer will be refunded ₹{{ order.total_amount }}.');">
+                        ✅ Confirm Return Received & Refund Buyer
+                    </button>
+                </form>
+            {% else %}
+                <p class="text-muted mb-0">
+                    <i class="fas fa-hourglass-half"></i> 
+                    Waiting for the buyer to ship the item back and submit the return tracking number.
+                </p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% empty %}
+<div class="card p-5 text-center">
+    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+    <h4 class="text-muted">No orders yet</h4>
+</div>
+<script src="/static/js/notifications.js"></script>
+{% endfor %}
+
+{% endblock %}
